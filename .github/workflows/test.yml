@@ -1,0 +1,12 @@
+name: test
+on:
+  push:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: 获取信息
+      id: get_info
+      run: echo "repository_name=${GITHUB_REPOSITORY/${{ github.repository }}\//}" >> $GITHUB_OUTPUT
+    - name: echo
+      run: ${{ steps.get_info.outputs.repository_name }}
