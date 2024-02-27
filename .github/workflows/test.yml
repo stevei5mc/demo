@@ -9,4 +9,4 @@ jobs:
       id: get_info
       run: echo "repository_name=${GITHUB_REPOSITORY/${{ github.repository_owner }}\//}" >> $GITHUB_OUTPUT
     - name: echo
-      run: echo ${{ steps.get_info.outputs.repository_name }}
+      run: echo 仓库 ${{ steps.get_info.outputs.repository_name }}
