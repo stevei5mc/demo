@@ -13,7 +13,7 @@ jobs:
         echo 仓库 ${{ steps.get_info.outputs.repository_name }}
         echo 所有者 ${{ github.repository_owner }}
         echo ${{ github.repository_owner }}/${{ steps.get_info.outputs.repository_name }}
-        mkdir staging
+#        mkdir staging
         echo ${{ steps.get_info.outputs.repository_name }} >> ./staging/build-log.log
         echo ${{ github.repository_owner }} >> ./staging/build-log.log
         echo ${{ github.run_number} }>> ./staging/build-log.log
