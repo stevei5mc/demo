@@ -14,7 +14,7 @@ jobs:
           echo 所有者 ${{ github.repository_owner }}
           echo ${{ github.repository_owner }}/${{ steps.get_info.outputs.repository_name }}
     - name: build log
-        run: |
+      run: |
           mkdir staging
           echo ${{ steps.get_info.outputs.repository_name }} >> ./staging/build-log.log
           echo ${{ github.repository_owner }} >> ./staging/build-log.log
