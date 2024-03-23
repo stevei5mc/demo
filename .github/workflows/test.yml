@@ -13,3 +13,14 @@ jobs:
           echo 仓库 ${{ steps.get_info.outputs.repository_name }}
           echo 所有者 ${{ github.repository_owner }}
           echo ${{ github.repository_owner }}/${{ steps.get_info.outputs.repository_name }}
+    - name: build log
+        run: |
+          mkdir staging
+          echo ${{ steps.get_info.outputs.repository_name }} >> ./staging/build-log.log
+          echo ${{ github.repository_owner }} >> ./staging/build-log.log
+          echo ${{ github.run_number} }>> ./staging/build-log.log
+    - name: 收集构建文件
+      uses: actions/upload-artifact@v1
+      with:
+        name: ${{ steps.get_info.outputs.repository_name }}-Build-${{ github.run_number}}
+        path: staging
