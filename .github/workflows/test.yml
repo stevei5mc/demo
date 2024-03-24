@@ -16,7 +16,7 @@ jobs:
     - name: 构建日志
       run: |
         mkdir staging
-        cat >> ./staging/1.txt << EOF
+        cat >> ./staging/build.log << EOF
         构建ID: PUSH-${{ github.run_number}}
         commit ID ${{ GITHUB.SHA }}
         EOF
