@@ -18,7 +18,7 @@ jobs:
         mkdir staging
         cat >> ./staging/1.txt << EOF
         构建ID: PUSH-${{ github.run_number}}
-        commit ID ${{ GITHUB_SHA }}
+        commit ID ${{ GITHUB.SHA }}
         EOF
     - name: 收集构建文件
       uses: actions/upload-artifact@v1
