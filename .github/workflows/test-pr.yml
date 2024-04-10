@@ -10,7 +10,7 @@ jobs:
       run: |
         echo "repository_name=${GITHUB_REPOSITORY/${{ github.repository_owner }}\//}" >> $GITHUB_OUTPUT
         echo ${{ GITHUB.REF }}
-        echo "PR_ID=${GITHUB_REF/refs\/pull\//\/merge}" >> $GITHUB_OUTPUT
+        echo "PR_ID=${GITHUB_REF/refs\/pull\//}" >> $GITHUB_OUTPUT
     - name: echo
       run: |-
         echo 仓库 ${{ steps.get_info.outputs.repository_name }}
