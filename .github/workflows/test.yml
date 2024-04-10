@@ -7,7 +7,9 @@ jobs:
     steps:
     - name: 获取信息
       id: get_info
-      run: echo "repository_name=${GITHUB_REPOSITORY/${{ github.repository_owner }}\//}" >> $GITHUB_OUTPUT
+      run: |
+        echo "repository_name=${GITHUB_REPOSITORY/${{ github.repository_owner }}\//}" >> $GITHUB_OUTPUT
+        echo ${{ GITHUB_REF }}
     - name: echo
       run: |-
         echo 仓库 ${{ steps.get_info.outputs.repository_name }}
