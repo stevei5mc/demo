@@ -24,14 +24,14 @@ jobs:
           echo 运行方式: ${{ inputs.run_type }}
           echo 需要批准的PR ID ${{ inputs.pullRequestNumber }}
       - name: 构建快照
-        if: inputs.run_type = 构建快照
+        if: inputs.run_type == 构建快照
         run: |
           echo 运行方式: ${{ inputs.run_type }}
       - name: 批准PR
-        if: inputs.run_type = 批准PR
+        if: inputs.run_type == 批准PR
         run: |
           echo 运行方式: ${{ inputs.run_type }}
       - name: 发布预览版
-        if: inputs.run_type = 发布预览版
+        if: inputs.run_type == 发布预览版
         run: |
           echo 运行方式: ${{ inputs.run_type }}
