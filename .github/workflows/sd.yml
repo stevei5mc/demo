@@ -1,0 +1,20 @@
+name: sd
+on:
+  workflow_dispatch:
+    inputs:
+      run_type:
+        description: '运行方式'
+        required: true
+        default: '构建快照'
+        type: choice
+        options:
+        - 构建快照
+        - 批准PR
+        - 发布预览版
+
+jobs:
+  log-the-inputs:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo 运行方式"${{ inputs.run_type }}"
