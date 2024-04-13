@@ -11,10 +11,14 @@ on:
         - 构建快照
         - 批准PR
         - 发布预览版
+      pullRequestNumber:
+        description: 需要批准的PR ID
+        required: false
 
 jobs:
   log-the-inputs:
     runs-on: ubuntu-latest
     steps:
       - run: |
-          echo 运行方式"${{ inputs.run_type }}"
+          echo 运行方式: ${{ inputs.run_type }}
+          echo 需要批准的PR ID ${{ inputs.pullRequestNumber }}
