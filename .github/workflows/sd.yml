@@ -28,10 +28,10 @@ jobs:
         run: |
           echo 运行方式: ${{ inputs.run_type }}
       - name: 批准PR
-        if: ${{ inputs.run_type }} = 构建快照
+        if: ${{ inputs.run_type }} = 批准PR
         run: |
           echo 运行方式: ${{ inputs.run_type }}
       - name: 发布预览版
-        if: ${{ inputs.run_type }} = 构建快照
+        if: ${{ inputs.run_type }} = 发布预览版
         run: |
           echo 运行方式: ${{ inputs.run_type }}
