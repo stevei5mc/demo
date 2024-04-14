@@ -9,9 +9,9 @@ on:
         type: choice
         options:
         - 构建快照
-        - 批准PR
+        - 批准PR(需要输入PR ID)
         - 发布预览版
-      pullRequestNumber:
+      PR_ID:
         description: 需要批准的PR ID
         required: false
 
@@ -21,17 +21,12 @@ jobs:
     steps:
       - name: 获取信息
         run: |
-          echo 运行方式: ${{ inputs.run_type }}
-          echo 需要批准的PR ID ${{ inputs.pullRequestNumber }}
-      - name: 构建快照
-        if: inputs.run_type == '构建快照'
-        run: |
-          echo 运行方式: ${{ inputs.run_type }}
+          echo "repository_name=${GITHUB_REPOSITORY/${{ github.repository_owner }}\//}" >> $GITHUB_OUTPUT
+      - name: 构建快照 or 发布预览版
+        if: inputs.run_type == '构建快照' || inputs.run_type == '发布预览版'
+        uses: actions/checkout@v4.1.1
       - name: 批准PR
         if: inputs.run_type == '批准PR'
-        run: |
-          echo 运行方式: ${{ inputs.run_type }}
-      - name: 发布预览版
-        if: inputs.run_type == '发布预览版'
-        run: |
-          echo 运行方式: ${{ inputs.run_type }}
+        uses: actions/checkout@v4.1.1
+        with:
+          ref: 'refs/pull/${{ inputs.PR_ID }}/merge'
