@@ -30,4 +30,4 @@ jobs:
         if: inputs.run_type == '批准PR'
         uses: actions/checkout@v4.1.1
         with:
-          ref: remotes/pull/${{ inputs.PR_ID }}/merge
+          ref: refs/remotes/pull/${{ inputs.PR_ID }}/merge
