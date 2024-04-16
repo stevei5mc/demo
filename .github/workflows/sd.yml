@@ -31,3 +31,5 @@ jobs:
         run: |
           gh pr checkout ${{ inputs.PR_ID }}
           ls -la
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
