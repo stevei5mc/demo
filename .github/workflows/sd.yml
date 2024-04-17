@@ -44,3 +44,6 @@ jobs:
           ls -la
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: echo
+        run: |
+          echo ${{ steps.get_info.outputs.run_type_en }}
