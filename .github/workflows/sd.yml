@@ -38,7 +38,6 @@ jobs:
         if: inputs.run_type == '批准PR'
         run: |
           ls -la
-          rm -rf ./*
           ls -la
           gh pr checkout ${{ inputs.PR_ID }}
           ls -la
