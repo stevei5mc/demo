@@ -2,8 +2,34 @@ name: test
 on:
   push:
 jobs:
-  build:
+  TEST1:
     runs-on: ubuntu-latest
+    steps:
+    - name: 获取信息
+      id: get_info
+      run: |
+        echo "repository_name=${GITHUB_REPOSITORY/${{ github.repository_owner }}\//}" >> $GITHUB_OUTPUT
+        echo ${{ GITHUB.REF }}
+    - name: echo
+      run: |-
+        echo 仓库 ${{ steps.get_info.outputs.repository_name }}
+        echo 所有者 ${{ github.repository_owner }}
+        echo ${{ github.repository_owner }}/${{ steps.get_info.outputs.repository_name }}
+    - name: 构建日志
+      run: |
+        mkdir staging
+        cat >> ./staging/build.log << EOF
+        构建ID: PUSH-${{ github.run_number}}
+        commit ID ${{ GITHUB.SHA }}
+        EOF
+    - name: 收集构建文件
+      uses: actions/upload-artifact@v1
+      with:
+        name: ${{ steps.get_info.outputs.repository_name }}-Build-${{ github.run_number}}
+        path: staging
+  TEST2:
+    runs-on: ubuntu-latest
+    needs: [TEST1] 
     steps:
     - name: 获取信息
       id: get_info
