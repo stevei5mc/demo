@@ -9,7 +9,7 @@ jobs:
       ref: ${{ steps.get_info.outputs.ref }}
     steps:
     - name: 获取信息
-      id: get_inf0
+      id: get_info
       run: |
         echo "repo_name=${GITHUB_REPOSITORY/${{ github.repository_owner }}\//}" >> $GITHUB_OUTPUT
         echo "ref=${{ GITHUB.REF }}" >> $GITHUB_OUTPUT
@@ -33,7 +33,7 @@ jobs:
   deploy:
     needs: 
     - build
-    - TEST1
+    - TEST2
     runs-on: ubuntu-latest
     steps:
       - run: echo "Deploying build ${{ needs.build.outputs.build_id }}"
