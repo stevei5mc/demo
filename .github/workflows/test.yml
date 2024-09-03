@@ -43,6 +43,7 @@ jobs:
        pwd
        ls -ls test
   build:
+    needs: TEST1
     runs-on: ubuntu-latest
     outputs:
       build_id: ${{ steps.build_step.outputs.build_id }}
@@ -53,16 +54,12 @@ jobs:
   deploy:
     needs: 
     - build
-    - TEST1
-    - TEST2
     runs-on: ubuntu-latest
     steps:
       - run: echo "Deploying build ${{ needs.build.outputs.build_id }}"
   debug:
     needs: 
-      - build
       - deploy
-      - TEST1
       - TEST2
     runs-on: ubuntu-latest
     if: ${{ failure() }}
