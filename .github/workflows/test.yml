@@ -26,7 +26,13 @@ jobs:
       run: |-
        pwd
        mkdir test
+       touch Hello.txt
+       touch World.txt
        ls -ls
+    - name: test2
+      run: |-
+       pwd
+       cp ./*.txt test
   build:
     runs-on: ubuntu-latest
     outputs:
