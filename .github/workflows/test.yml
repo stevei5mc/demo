@@ -13,10 +13,14 @@ jobs:
       run: |
         echo "repo_name=${GITHUB_REPOSITORY/${{ github.repository_owner }}\//}" >> $GITHUB_OUTPUT
         echo "ref=${{ GITHUB.REF }}" >> $GITHUB_OUTPUT
+    - name: 拉取代码
+      uses: actions/checkout@v4.1.6
   TEST1:
     runs-on: ubuntu-latest
     needs: initialize
     steps:
+    - name: 拉取代码
+      uses: actions/checkout@v4.1.6
     - name: echo
       run: |-
         echo 仓库 ${{ needs.initialize.outputs.repo_name }}
@@ -50,6 +54,8 @@ jobs:
     outputs:
       build_id: ${{ steps.build_step.outputs.build_id }}
     steps:
+      - name: 拉取代码
+        uses: actions/checkout@v4.1.6 
       - name: Build
         id: build_step
         run: echo "build_id=$RANDOM" >> $GITHUB_OUTPUT
@@ -57,6 +63,8 @@ jobs:
     needs: initialize
     runs-on: ubuntu-latest
     steps:
+    - name: 拉取代码
+      uses: actions/checkout@v4.1.6 
     - name: zip files
       run: |-
         mkdir test
@@ -76,6 +84,8 @@ jobs:
     - TEST2
     runs-on: ubuntu-latest
     steps:
+      - name: 拉取代码
+        uses: actions/checkout@v4.1.6 
       - run: echo "Deploying build ${{ needs.build.outputs.build_id }}"
   # debug:
   #   needs: 
