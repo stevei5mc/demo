@@ -32,7 +32,7 @@ jobs:
        mkdir test
        touch Hello.txt
        touch World.txt
-       ls -ls
+       ls -la
     - name: test2
       run: |-
        pwd
@@ -47,7 +47,7 @@ jobs:
     - name: test
       run: |-
        pwd
-       ls -ls test
+       ls -la test
   build:
     needs: initialize
     runs-on: ubuntu-latest
