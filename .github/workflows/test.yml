@@ -108,7 +108,7 @@ jobs:
       run: |-
         mkdir test
         touch Hello.txt
-        toch World.txt
+        touch World.txt
         zip HelloWorld.zip ./*.txt
         cp ./HelloWorld.zip test
         ls -la CacheTest
@@ -135,7 +135,7 @@ jobs:
       - name: test
         run: |-
           pwd
-          mkdi test
+          mkdir test
           touch Hello.txt
           touch World.txt
           ls -la
