@@ -108,7 +108,7 @@ jobs:
       run: |-
         mkdir test
         touch Hello.txt
-        touch World.txt
+        toch World.txt
         zip HelloWorld.zip ./*.txt
         cp ./HelloWorld.zip test
         ls -la CacheTest
@@ -132,11 +132,18 @@ jobs:
           path: |
             ./CacheTest
           key: ${{ runner.os }}-${{ hashFiles('**/test.txt') }}
-  # debug:
-  #   needs: 
-  #     - deploy
-  #     - TEST2
-  #   runs-on: ubuntu-latest
-  #   if: ${{ failure() }}
-  #   steps:
-  #     - run: echo "Failed to build and deploy"
+      - name: test
+        run: |-
+          pwd
+          mkdi test
+          touch Hello.txt
+          touch World.txt
+          ls -la
+          ls -la CacheTest
+  debug:
+    needs: 
+      - deploy
+    runs-on: ubuntu-latest
+    if: ${{ failure() }}
+    steps:
+      - run: echo "Failed to build and deploy"
