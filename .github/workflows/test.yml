@@ -35,6 +35,12 @@ jobs:
         touch 4.txt
         touch 5.txt
         cd ../
+    - name: 检查改动文件
+      id: changed-fies
+      uses: tj-actions/changed-files@v45.0.3
+    - name: 输出改动文件
+      run: echo ${{ steps.changed-fies.outputs.all_changed_and_modified_files }}
+
   build:
     needs: initialize
     runs-on: ubuntu-latest
@@ -52,6 +58,7 @@ jobs:
       - name: Build
         id: build_step
         run: echo "build_id=$RANDOM" >> $GITHUB_OUTPUT
+
   TEST1:
     runs-on: ubuntu-latest
     needs: build
@@ -92,6 +99,7 @@ jobs:
       run: |-
        pwd
        ls -la test
+
   TEST2:
     needs: build
     runs-on: ubuntu-latest
@@ -117,10 +125,36 @@ jobs:
       with:
         name: test-TEST2
         path: test
+
+  TEST3:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - name: tset1
+      run: |-
+        mkdir test
+        pwd
+        ls -la
+        cd test
+    - name: 拉取代码
+      uses: actions/checkout@v4.1.6 
+    # - name: Cache test
+    #   uses: actions/cache@v4.0.2
+    #   with:
+    #     path: |
+    #       ./CacheTest
+    #     key: ${{ runner.os }}-${{ hashFiles('**/test.txt') }}
+    - name: tset2
+      run: |-
+        pwd
+        ls -la
+
+        
   deploy:
     needs: 
     - TEST1
     - TEST2
+    - TEST3
     runs-on: ubuntu-latest
     steps:
       - name: 拉取代码
@@ -140,6 +174,7 @@ jobs:
           touch World.txt
           ls -la
           ls -la CacheTest
+
   debug:
     needs: 
       - deploy
