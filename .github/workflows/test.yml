@@ -1,4 +1,4 @@
-name: 测试
+name: workflow test
 on:
   push:
   workflow_dispatch:
@@ -141,12 +141,14 @@ jobs:
         touch 3.txt
         touch 4.txt
         touch 5.txt
+        mkdir Test2
         cd ./Test2
         touch 1.txt
         touch 2.txt
         touch 3.txt
         touch 4.txt
         touch 5.txt
+        mkdir Test3
         cd ./Test3
         touch 1.txt
         touch 2.txt
