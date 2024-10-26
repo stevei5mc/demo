@@ -83,7 +83,6 @@ jobs:
        touch Hello.txt
        touch World.txt
        ls -la
-       ls -la CacheTest
     - name: test2
       run: |-
        pwd
@@ -119,7 +118,6 @@ jobs:
         touch World.txt
         zip HelloWorld.zip ./*.txt
         cp ./HelloWorld.zip test
-        ls -la CacheTest
     - name: 收集构建文件
       uses: actions/upload-artifact@v4.3.3
       with:
@@ -134,10 +132,28 @@ jobs:
       uses: actions/checkout@v4.1.6 
     - name: tset1
       run: |-
-        mkdir test
         pwd
+        mkdir Test
         ls -la
-        cd test
+        cd ./Test
+        touch 1.txt
+        touch 2.txt
+        touch 3.txt
+        touch 4.txt
+        touch 5.txt
+        cd ./Test2
+        touch 1.txt
+        touch 2.txt
+        touch 3.txt
+        touch 4.txt
+        touch 5.txt
+        cd ./Test3
+        touch 1.txt
+        touch 2.txt
+        touch 3.txt
+        touch 4.txt
+        touch 5.txt
+        cd ../../../
     # - name: Cache test
     #   uses: actions/cache@v4.0.2
     #   with:
@@ -147,9 +163,15 @@ jobs:
     - name: tset2
       run: |-
         pwd
-        ls -la
+        mkdir ttestt
+        cp -r ./Test/* ttestt
+        ls -la Test
+        ls -la Test/Test2
+        ls -la Test/Test2/Test3
+        ls -la ttestt
+        ls -la ttestt/Test2
+        ls -la ttestt/Test2/Test3
 
-        
   deploy:
     needs: 
     - TEST1
