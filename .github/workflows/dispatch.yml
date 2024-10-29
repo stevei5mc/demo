@@ -55,7 +55,7 @@ jobs:
       with:
         submodules: true
     - name: 拉取代码(批准PR专用)
-      if: ${{ inputs.PR_Approve }} == 'true' && ${{ inputs.deploy-gitHub-pages }} == 'false'
+      if: inputs.PR_Approve == 'true' && inputs.deploy-gitHub-pages == 'false'
         # run: |
         #   ls -la
         #   gh pr checkout ${{ inputs.PR_ID }}
@@ -91,7 +91,7 @@ jobs:
         with:
           submodules: true
       - name: 拉取代码(批准PR专用)
-        if: ${{ inputs.PR_Approve }} == 'true' && ${{ inputs.deploy-gitHub-pages }} == 'false'
+        if: inputs.PR_Approve == 'true' && inputs.deploy-gitHub-pages == 'false'
         # run: |
         #   ls -la
         #   gh pr checkout ${{ inputs.PR_ID }}
@@ -115,7 +115,7 @@ jobs:
 
   # 部署github pages和批准PR的工作流无法一起运行，只能二选一来运行
   deploy-gitHub-pages:
-    if: ${{ inputs.deploy-gitHub-pages }} == 'true' && ${{ inputs.PR_Approve }} == 'false'
+    if: inputs.deploy-gitHub-pages == 'true' && inputs.PR_Approve == 'false'
     name: Deploy gitHub pages
     needs: build-Docusaurus
     # 给予 GITHUB_TOKEN 进行 Pages 部署所必须的权限
@@ -135,7 +135,7 @@ jobs:
 
   # 部署github pages和批准PR的工作流无法一起运行，只能二选一来运行
   PR-Approve:
-    if: ${{ inputs.PR_Approve }} == 'true' && ${{ inputs.deploy-gitHub-pages }} == 'false'
+    if: inputs.PR_Approve == 'true' && inputs.deploy-gitHub-pages == 'false'
     name: PR Approve
     needs: 
     - build-Docusaurus
@@ -166,7 +166,7 @@ jobs:
         id: get_info
         run: echo "url=$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" >> $GITHUB_OUTPUT
       - name: PRComment
-        if: ${{ inputs.PR_Approve }} == 'true' && ${{ inputs.deploy-gitHub-pages }} == 'false'
+        if: inputs.PR_Approve == 'true' && inputs.deploy-gitHub-pages == 'false'
         uses: miry/prcomment@v0.1.3
         with:
           msg: |
