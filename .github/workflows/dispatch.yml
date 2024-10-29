@@ -56,10 +56,11 @@ jobs:
         submodules: true
     - name: 拉取代码(批准PR专用)
       if: ${{ inputs.PR_Approve }} == 'true' && ${{ inputs.deploy-gitHub-pages }} == 'false'
-      run: |
-        ls -la
-        gh pr checkout ${{ inputs.PR_ID }}
-        ls -la
+        # run: |
+        #   ls -la
+        #   gh pr checkout ${{ inputs.PR_ID }}
+        #   ls -la
+      run: ls -la
     - name: 安装java8
       uses: actions/setup-java@v4
       with:
@@ -91,10 +92,11 @@ jobs:
           submodules: true
       - name: 拉取代码(批准PR专用)
         if: ${{ inputs.PR_Approve }} == 'true' && ${{ inputs.deploy-gitHub-pages }} == 'false'
-        run: |
-          ls -la
-          gh pr checkout ${{ inputs.PR_ID }}
-          ls -la
+        # run: |
+        #   ls -la
+        #   gh pr checkout ${{ inputs.PR_ID }}
+        #   ls -la
+        run: ls -la
       - uses: actions/setup-node@v4
         with:
           node-version: 18
