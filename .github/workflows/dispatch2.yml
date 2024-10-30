@@ -48,10 +48,22 @@ jobs:
     - run: echo 1919810
       if: inputs.deploy-gitHub-pages == 'true'
     - run: echo 1145141919810
-      if: inputs.PR_Approve == 'true' && nputs.deploy-gitHub-pages == 'false'
+      if: inputs.PR_Approve == 'true' && inputs.deploy-gitHub-pages == 'false'
     - run: echo hello
-      if: (inputs.PR_Approve == 'true' && nputs.deploy-gitHub-pages == 'false')
+      if: (inputs.PR_Approve == 'true' && inputs.deploy-gitHub-pages == 'false')
     - run: echo world
       if: (${{ inputs.PR_Approve }} == 'true' && ${{ inputs.deploy-gitHub-pages }} == 'false')
     - run: echo hello world
       if: ${{ inputs.PR_Approve }} == 'true' && ${{ inputs.deploy-gitHub-pages }} == 'false'
+    - name: test
+      run: |
+        if [ "${{ inputs.PR_Approve }}" == "true" ]; then
+          echo 114514
+        else
+          echo 1919810
+        fi
+        if [ "${{ inputs.deploy-gitHub-pages }}" == "true" ]; then
+          echo hello
+        else
+          echo world
+        fi

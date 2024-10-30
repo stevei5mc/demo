@@ -127,7 +127,7 @@ jobs:
         path: test
 
   TEST3:
-    if: contains(needs.initialize.outputs.changed_fies, 'test3/') 
+    if: contains(needs.initialize.outputs.changed_fies, 'test3/')
     needs: build
     runs-on: ubuntu-latest
     steps:
