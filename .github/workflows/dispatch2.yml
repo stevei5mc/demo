@@ -67,3 +67,13 @@ jobs:
         else
           echo world
         fi
+        if [ "${{ inputs.PR_Approve }}" == "true" && "${{ inputs.deploy-gitHub-pages }}" == "false"]; then
+          echo 1 1 4 5 1 4
+        else
+          echo 1 9 1 9 8 1 0
+        fi
+        if [ "${{ inputs.deploy-gitHub-pages }}" == "true" && "${{ inputs.PR_Approve }}" == "false"]; then
+          echo h e l l o
+        else
+          echo w o r l d
+        fi

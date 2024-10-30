@@ -7,6 +7,7 @@ jobs:
   initialize:
     runs-on: ubuntu-latest
     outputs:
+      changed_fies: ${{ steps.changed-fies.outputs.all_changed_and_modified_files }}
       repo_name: ${{ steps.get_info.outputs.repo_name }}
       ref: ${{ steps.get_info.outputs.ref }}
     steps:
