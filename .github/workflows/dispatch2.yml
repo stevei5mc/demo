@@ -45,9 +45,9 @@ jobs:
       run: echo "repository_name=${GITHUB_REPOSITORY/${{ github.repository_owner }}\//}" >> $GITHUB_OUTPUT
     - name: test
       run: |
-        la -ls /home/runner/work/_temp
-        la -ls /opt/hostedtoolcache
-        la -ls /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk
+        ls -la /home/runner/work/_temp
+        ls -la /opt/hostedtoolcache
+        ls -la /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk
         if [ "${{ inputs.PR_Approve }}" == "true" ]; then
           echo 114514
         else
@@ -71,7 +71,7 @@ jobs:
     - run: echo 114514
       if: ${{ inputs.deploy-gitHub-pages }} && ${{ !inputs.PR_Approve }}
     - run: echo 1919810
-      if: inputs.deploy-gitHub-pages == 'true'
+      if: ${{ inputs.deploy-gitHub-pages }}
     - run: echo 1145141919810
       if: inputs.PR_Approve == 'true' && inputs.deploy-gitHub-pages == 'false'
     - run: echo hello
