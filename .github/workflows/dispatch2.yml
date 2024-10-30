@@ -33,9 +33,6 @@ jobs:
       repo_name: ${{ steps.get_info.outputs.repo_name }}
       artifact_name: ${{ steps.get_info.outputs.repository_name }}-Dispatch2-Build_${{ github.run_number}}
     steps:
-    - name: 获取信息
-      id: get_info
-      run: echo "repository_name=${GITHUB_REPOSITORY/${{ github.repository_owner }}\//}" >> $GITHUB_OUTPUT
     - name: 获取输入参数
       run: |
         echo Build plugin : ${{ inputs.build-plugin }}
@@ -43,20 +40,14 @@ jobs:
         echo Deploy gitHub pages : ${{ inputs.deploy-gitHub-pages }}
         echo PR Approve : ${{ inputs.PR_Approve }}
         echo PR Approve ID : ${{ inputs.PR_ID }}
-    - run: echo 114514
-      if: inputs.PR_Approve == 'true'
-    - run: echo 1919810
-      if: inputs.deploy-gitHub-pages == 'true'
-    - run: echo 1145141919810
-      if: inputs.PR_Approve == 'true' && inputs.deploy-gitHub-pages == 'false'
-    - run: echo hello
-      if: (inputs.PR_Approve == 'true' && inputs.deploy-gitHub-pages == 'false')
-    - run: echo world
-      if: (${{ inputs.PR_Approve }} == 'true' && ${{ inputs.deploy-gitHub-pages }} == 'false')
-    - run: echo hello world
-      if: ${{ inputs.PR_Approve }} == 'true' && ${{ inputs.deploy-gitHub-pages }} == 'false'
+    - name: 获取信息
+      id: get_info
+      run: echo "repository_name=${GITHUB_REPOSITORY/${{ github.repository_owner }}\//}" >> $GITHUB_OUTPUT
     - name: test
       run: |
+        la -ls /home/runner/work/_temp
+        la -ls /opt/hostedtoolcache
+        la -ls /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk
         if [ "${{ inputs.PR_Approve }}" == "true" ]; then
           echo 114514
         else
@@ -67,13 +58,25 @@ jobs:
         else
           echo world
         fi
-        if [ "${{ inputs.PR_Approve }}" == "true" && "${{ inputs.deploy-gitHub-pages }}" == "false"]; then
+        if [ "${{ inputs.PR_Approve }}" == "true" && "${{ inputs.deploy-gitHub-pages }}" == "false" ]; then
           echo 1 1 4 5 1 4
         else
           echo 1 9 1 9 8 1 0
         fi
-        if [ "${{ inputs.deploy-gitHub-pages }}" == "true" && "${{ inputs.PR_Approve }}" == "false"]; then
+        if [ "${{ inputs.deploy-gitHub-pages }}" == "true" && "${{ inputs.PR_Approve }}" == "false" ]; then
           echo h e l l o
         else
           echo w o r l d
         fi
+    - run: echo 114514
+      if: ${{ inputs.deploy-gitHub-pages }} && ${{ !inputs.PR_Approve }}
+    - run: echo 1919810
+      if: inputs.deploy-gitHub-pages == 'true'
+    - run: echo 1145141919810
+      if: inputs.PR_Approve == 'true' && inputs.deploy-gitHub-pages == 'false'
+    - run: echo hello
+      if: (inputs.PR_Approve == 'true' && inputs.deploy-gitHub-pages == 'false')
+    - run: echo world
+      if: ${{ inputs.deploy-gitHub-pages }} == 'false'
+    - run: echo hello world
+      if: ${{ inputs.PR_Approve }} == 'true'
