@@ -1,0 +1,55 @@
+name: dispatch2
+on:
+  workflow_dispatch:
+    inputs:
+      build-plugin:
+        description: 'Build plugin'
+        required: false
+        default: true
+        type: boolean
+      build-Docusaurus:
+        description: 'Build docusaurus'
+        required: false
+        default: true
+        type: boolean
+      deploy-gitHub-pages:
+        description: 'Deploy gitHub pages'
+        required: false
+        default: false
+        type: boolean
+      PR_Approve:
+        description: 'PR Approve'
+        required: false
+        default: false
+        type: boolean
+      PR_ID:
+        description: 'PR Approve ID'
+        required: false
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    outputs:
+      repo_name: ${{ steps.get_info.outputs.repo_name }}
+      artifact_name: ${{ steps.get_info.outputs.repository_name }}-Dispatch2-Build_${{ github.run_number}}
+    steps:
+    - name: 获取信息
+      id: get_info
+      run: echo "repository_name=${GITHUB_REPOSITORY/${{ github.repository_owner }}\//}" >> $GITHUB_OUTPUT
+    - name: 获取输入参数
+      run: |
+        echo Build plugin : ${{ inputs.build-plugin }}
+        echo Build docusaurus : ${{ inputs.build-Docusaurus }}
+        echo Deploy gitHub pages : ${{ inputs.deploy-gitHub-pages }}
+        echo PR Approve : ${{ inputs.PR_Approve }}
+        echo PR Approve ID : ${{ inputs.PR_ID }}
+    - run: echo 114514
+      if: inputs.PR_Approve == 'true'
+    - run: echo 1919810
+      if: inputs.deploy-gitHub-pages == 'true'
+    - run: echo 1145141919810
+      if: inputs.PR_Approve == 'true' && nputs.deploy-gitHub-pages == 'false'
+    - run: echo hello
+      if: (inputs.PR_Approve == 'true' && nputs.deploy-gitHub-pages == 'false')
+    - run: echo world
+      if: (${{ inputs.PR_Approve }} == 'true' && ${{ nputs.deploy-gitHub-pages }} == 'false')
