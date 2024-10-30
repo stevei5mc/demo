@@ -52,4 +52,6 @@ jobs:
     - run: echo hello
       if: (inputs.PR_Approve == 'true' && nputs.deploy-gitHub-pages == 'false')
     - run: echo world
-      if: (${{ inputs.PR_Approve }} == 'true' && ${{ nputs.deploy-gitHub-pages }} == 'false')
+      if: (${{ inputs.PR_Approve }} == 'true' && ${{ inputs.deploy-gitHub-pages }} == 'false')
+    - run: echo hello world
+      if: ${{ inputs.PR_Approve }} == 'true' && ${{ inputs.deploy-gitHub-pages }} == 'false'

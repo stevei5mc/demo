@@ -61,6 +61,7 @@ jobs:
 
   TEST1:
     runs-on: ubuntu-latest
+    if: contains(needs.initialize.outputs.changed_fies, 'test1/') 
     needs: build
     steps:
     - name: 拉取代码
@@ -100,6 +101,7 @@ jobs:
        ls -la test
 
   TEST2:
+    if: contains(needs.initialize.outputs.changed_fies, 'test2/') 
     needs: build
     runs-on: ubuntu-latest
     steps:
@@ -125,6 +127,7 @@ jobs:
         path: test
 
   TEST3:
+    if: contains(needs.initialize.outputs.changed_fies, 'test3/') 
     needs: build
     runs-on: ubuntu-latest
     steps:
