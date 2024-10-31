@@ -62,7 +62,7 @@ jobs:
 
   TEST1:
     runs-on: ubuntu-latest
-    if: contains(needs.initialize.outputs.changed_fies, 'test1/') 
+    if: contains(needs.initialize.outputs.changed_fies, 'test1/') || contains(needs.initialize.outputs.changed_fies, 'test.txt')
     needs: build
     steps:
     - name: 拉取代码
@@ -102,7 +102,7 @@ jobs:
        ls -la test
 
   TEST2:
-    if: contains(needs.initialize.outputs.changed_fies, 'test2/') 
+    if: contains(needs.initialize.outputs.changed_fies, 'test2/') || contains(needs.initialize.outputs.changed_fies, 'test.txt')
     needs: build
     runs-on: ubuntu-latest
     steps:
@@ -128,7 +128,7 @@ jobs:
         path: test
 
   TEST3:
-    if: contains(needs.initialize.outputs.changed_fies, 'test3/')
+    if: contains(needs.initialize.outputs.changed_fies, 'test3/') || contains(needs.initialize.outputs.changed_fies, 'test.txt')
     needs: build
     runs-on: ubuntu-latest
     steps:

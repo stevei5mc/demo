@@ -43,40 +43,28 @@ jobs:
     - name: 获取信息
       id: get_info
       run: echo "repository_name=${GITHUB_REPOSITORY/${{ github.repository_owner }}\//}" >> $GITHUB_OUTPUT
-    - name: test
+    - name: 设置信息
+      id: set_info
       run: |
-        ls -la /home/runner/work/_temp
-        ls -la /opt/hostedtoolcache
-        ls -la /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk
-        if [ "${{ inputs.PR_Approve }}" == "true" ]; then
-          echo 114514
-        else
-          echo 1919810
-        fi
-        if [ "${{ inputs.deploy-gitHub-pages }}" == "true" ]; then
-          echo hello
-        else
-          echo world
-        fi
         if [[ "${{ inputs.PR_Approve }}" == "true" && "${{ inputs.deploy-gitHub-pages }}" == "false" ]]; then
-          echo 1 1 4 5 1 4
+          echo "run_PR_Approve=run" >> $GITHUB_OUTPUT
         else
-          echo 1 9 1 9 8 1 0
+          echo "run_PR_Approve=no_run" >> $GITHUB_OUTPUT
         fi
         if [[ "${{ inputs.deploy-gitHub-pages }}" == "true" && "${{ inputs.PR_Approve }}" == "false" ]]; then
-          echo h e l l o
+          echo "run_Deploy_gitHub_pages=run" >> $GITHUB_OUTPUT
         else
-          echo w o r l d
+          echo "run_Deploy_gitHub_pages=no_run" >> $GITHUB_OUTPUT
         fi
     - run: echo 114514
-      if: ${{ inputs.deploy-gitHub-pages }} && ${{ !inputs.PR_Approve }}
+      if: (${{ !inputs.deploy-gitHub-pages }} == 'false') && (${{ inputs.PR_Approve }} == 'true')
     - run: echo 1919810
-      if: ${{ inputs.deploy-gitHub-pages }} && ${{ inputs.PR_Approve }}
+      if: (${{ inputs.deploy-gitHub-pages }} == 'true') && (${{ inputs.PR_Approve }} == 'true')
     - run: echo 1145141919810
-      if: inputs.PR_Approve == 'true' && inputs.deploy-gitHub-pages == 'false'
+      if: (${{ inputs.PR_Approve }} == 'true')
     - run: echo hello
-      if: (inputs.PR_Approve == 'true' && inputs.deploy-gitHub-pages == 'false')
+      if: (${{ inputs.deploy-gitHub-pages }} == 'false')
     - run: echo world
-      if: ${{ inputs.deploy-gitHub-pages }} == 'false'
+      if: steps.set_info.outputs.run_PR_Approve == 'run'
     - run: echo hello world
-      if: ${{ inputs.PR_Approve }} == 'true'
+      if: steps.set_info.outputs.run_Deploy_gitHub_pages == 'run'
