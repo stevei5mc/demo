@@ -56,14 +56,16 @@ jobs:
         else
           echo "run_Deploy_gitHub_pages=no_run" >> $GITHUB_OUTPUT
         fi
+        echo "run_Deploy_gitHub_pages2=${{ inputs.deploy-gitHub-pages }}" >> $GITHUB_OUTPUT
+        echo "run_PR_Approve2=${{ inputs.PR_Approve }}" >> $GITHUB_OUTPUT
     - run: echo 114514
       if: (${{ !inputs.deploy-gitHub-pages }} == 'false') && (${{ inputs.PR_Approve }} == 'true')
     - run: echo 1919810
       if: (${{ inputs.deploy-gitHub-pages }} == 'true') && (${{ inputs.PR_Approve }} == 'true')
     - run: echo 1145141919810
-      if: (${{ inputs.PR_Approve }} == 'true')
+      if: steps.set_info.outputs.run_PR_Approve2 == 'true'
     - run: echo hello
-      if: (${{ inputs.deploy-gitHub-pages }} == 'false')
+      if: steps.set_info.outputs.run_Deploy_gitHub_pages2 == 'true'
     - run: echo world
       if: steps.set_info.outputs.run_PR_Approve == 'run'
     - run: echo hello world

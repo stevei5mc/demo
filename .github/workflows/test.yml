@@ -59,11 +59,26 @@ jobs:
       - name: Build
         id: build_step
         run: echo "build_id=$RANDOM" >> $GITHUB_OUTPUT
+      - name: echo
+        run: |-
+          echo 仓库 ${{ needs.initialize.outputs.repo_name }}
+          echo 所有者 ${{ github.repository_owner }}
+          echo ${{ github.repository_owner }}/${{ needs.initialize.outputs.repo_name }}
 
-  TEST1:
+  TEST:
+    strategy:
+      matrix:
+        include:
+          - name: "TEST1"
+            path: "test1"
+          - name: "TEST2"
+            path: "test2"
+          - name: "TEST3"
+            path: "test3"
     runs-on: ubuntu-latest
-    if: contains(needs.initialize.outputs.changed_fies, 'test1/') || contains(needs.initialize.outputs.changed_fies, 'test.txt')
     needs: build
+    name: ${{ matrix.name }}
+    if: contains(needs.initialize.outputs.changed_fies, 'test.txt')
     steps:
     - name: 拉取代码
       uses: actions/checkout@v4.1.6
@@ -73,11 +88,6 @@ jobs:
     #     path: |
     #       ./CacheTest
     #     key: ${{ runner.os }}-${{ hashFiles('**/test.txt') }}
-    - name: echo
-      run: |-
-        echo 仓库 ${{ needs.initialize.outputs.repo_name }}
-        echo 所有者 ${{ github.repository_owner }}
-        echo ${{ github.repository_owner }}/${{ needs.initialize.outputs.repo_name }}
     - name: test
       run: |-
        pwd
@@ -85,110 +95,17 @@ jobs:
        touch Hello.txt
        touch World.txt
        ls -la
-    - name: test2
-      run: |-
-       pwd
        cp ./*.txt test
        mkdir test/HelloWorld
        touch test/HelloWorld/helloWorld.txt
     - name: 收集构建文件
       uses: actions/upload-artifact@v4.3.3
       with:
-        name: test-TEST1
+        name: ${{ matrix.name }}
         path: test
-    - name: test
-      run: |-
-       pwd
-       ls -la test
-
-  TEST2:
-    if: contains(needs.initialize.outputs.changed_fies, 'test2/') || contains(needs.initialize.outputs.changed_fies, 'test.txt')
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-    - name: 拉取代码
-      uses: actions/checkout@v4.1.6 
-    # - name: Cache test
-    #   uses: actions/cache@v4.0.2
-    #   with:
-    #     path: |
-    #       ./CacheTest
-    #     key: ${{ runner.os }}-${{ hashFiles('**/test.txt') }}
-    - name: zip files
-      run: |-
-        mkdir test
-        touch Hello.txt
-        touch World.txt
-        zip HelloWorld.zip ./*.txt
-        cp ./HelloWorld.zip test
-    - name: 收集构建文件
-      uses: actions/upload-artifact@v4.3.3
-      with:
-        name: test-TEST2
-        path: test
-
-  TEST3:
-    if: contains(needs.initialize.outputs.changed_fies, 'test3/') || contains(needs.initialize.outputs.changed_fies, 'test.txt')
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-    - name: 拉取代码
-      uses: actions/checkout@v4.1.6 
-    - name: tset1
-      run: |-
-        pwd
-        mkdir Test
-        ls -la
-        cd ./Test
-        touch 1.txt
-        touch 2.txt
-        touch 3.txt
-        touch 4.txt
-        touch 5.txt
-        mkdir Test2
-        cd ./Test2
-        touch 1.txt
-        touch 2.txt
-        touch 3.txt
-        touch 4.txt
-        touch 5.txt
-        mkdir Test3
-        cd ./Test3
-        touch 1.txt
-        touch 2.txt
-        touch 3.txt
-        touch 4.txt
-        touch 5.txt
-        touch testtttt.txt
-        cd ../../../
-    # - name: Cache test
-    #   uses: actions/cache@v4.0.2
-    #   with:
-    #     path: |
-    #       ./CacheTest
-    #     key: ${{ runner.os }}-${{ hashFiles('**/test.txt') }}
-    - name: tset2
-      run: |-
-        pwd
-        mkdir ttestt
-        cp -r ./Test/* ttestt
-        ls -la Test
-        ls -la Test/Test2
-        ls -la Test/Test2/Test3
-        ls -la ttestt
-        ls -la ttestt/Test2
-        ls -la ttestt/Test2/Test3
-    - name: 收集构建文件
-      uses: actions/upload-artifact@v4.3.3
-      with:
-        name: test-TEST3
-        path: Test/Test2/Test3
 
   deploy:
-    needs: 
-    - TEST1
-    - TEST2
-    - TEST3
+    needs: TEST
     runs-on: ubuntu-latest
     steps:
       - name: 拉取代码
