@@ -44,7 +44,7 @@ jobs:
       id: get_info
       run: |
         echo "repo_name=${GITHUB_REPOSITORY/${{ github.repository_owner }}\//}" >> $GITHUB_OUTPUT
-        echo "Deploy_gitHub_pages=${GITHUB_REPOSITORY/${{ github.repository_owner }}\//}" >> $GITHUB_OUTPUT
+        echo "Deploy_gitHub_pages=${{ inputs.deploy-gitHub-pages }}" >> $GITHUB_OUTPUT
         echo "PR_Approve=${{ inputs.PR_Approve }}" >> $GITHUB_OUTPUT
         echo "PR_ID=${{ inputs.PR_ID }}" >> $GITHUB_OUTPUT
         echo "url=$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" >> $GITHUB_OUTPUT

@@ -78,7 +78,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     name: ${{ matrix.name }}
-    if: contains(needs.initialize.outputs.changed_fies, 'matrix.path/') || contains(needs.initialize.outputs.changed_fies, 'test.txt')
+    #if: contains(needs.initialize.outputs.changed_fies, 'matrix.path/') || contains(needs.initialize.outputs.changed_fies, 'test.txt')
     steps:
     - name: 拉取代码
       uses: actions/checkout@v4.1.6
