@@ -91,18 +91,18 @@ jobs:
     - name: test
       run: |-
        pwd
-       mkdir test
+       mkdir ${{ matrix.path }}
        touch Hello.txt
        touch World.txt
        ls -la
-       cp ./*.txt test
-       mkdir test/HelloWorld
-       touch test/HelloWorld/helloWorld.txt
+       cp ./*.txt ${{ matrix.path }}
+       mkdir ${{ matrix.path }}/HelloWorld
+       touch ${{ matrix.path }}/HelloWorld/helloWorld.txt
     - name: 收集构建文件
       uses: actions/upload-artifact@v4.3.3
       with:
         name: ${{ matrix.name }}
-        path: test
+        path: ${{ matrix.path }}
 
   deploy:
     needs: TEST
