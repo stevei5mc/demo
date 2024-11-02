@@ -35,6 +35,7 @@ jobs:
       Deploy_gitHub_pages: ${{ steps.get_info.outputs.Deploy_gitHub_pages }}
       PR_Approve: ${{ steps.get_info.outputs.PR_Approve }}
       PR_ID: ${{ steps.get_info.outputs.PR_ID }}
+      url: ${{ steps.get_info.outputs.url }}
     steps:
     - name: 输入参数
       run: |
@@ -167,7 +168,7 @@ jobs:
       #       If there is a new submission, this approval will be automatically canceled.
       #       Thank you very much for your contribution to this event。
 
-      #       $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID
+      #       ${{ needs.initialize.outputs.url }}
 
   aftermath-of-failure:
     if: ${{ failure() }}
@@ -182,6 +183,7 @@ jobs:
         run: |
           echo "Deploy_gitHub_pages=${{ inputs.deploy-gitHub-pages }}" >> $GITHUB_OUTPUT
           echo "PR_Approve=${{ inputs.PR_Approve }}" >> $GITHUB_OUTPUT
+          echo "url=$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" >> $GITHUB_OUTPUT
       - name: PR review message
         if: steps.get_info.outputs.PR_Approve == 'true' && steps.get_info.outputs.Deploy_gitHub_pages == 'false'
         uses: miry/prcomment@v0.1.3
@@ -190,6 +192,6 @@ jobs:
             构建失败，请查看构建获取失败原因：
             Build failed, please check the build to obtain the reason for the failure:
 
-            $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID
+            ${{ steps.get_info.outputs.url }}
           pr: ${{ inputs.PR_ID }}
           token: ${{ secrets.GITHUB_TOKEN }}
