@@ -90,14 +90,16 @@ jobs:
     #     key: ${{ runner.os }}-${{ hashFiles('**/test.txt') }}
     - name: test
       run: |-
-       pwd
-       mkdir ${{ matrix.path }}
-       touch Hello.txt
-       touch World.txt
-       ls -la
-       cp ./*.txt ${{ matrix.path }}
-       mkdir ${{ matrix.path }}/HelloWorld
-       touch ${{ matrix.path }}/HelloWorld/helloWorld.txt
+        pwd
+        mkdir ${{ matrix.path }}
+        cd ./${{ matrix.path }}
+        touch Hello.txt
+        touch World.txt
+        mkdir HelloWorld
+        cd ./HelloWorld
+        touch helloWorld.txt
+        cd ../../
+        ls -la
     - name: 收集构建文件
       uses: actions/upload-artifact@v4.3.3
       with:
