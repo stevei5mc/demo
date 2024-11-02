@@ -67,7 +67,7 @@ jobs:
       if: needs.initialize.outputs.PR_Approve == 'true' && needs.initialize.outputs.Deploy_gitHub_pages == 'false'
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
+      run: |
           ls -la
           gh pr checkout ${{ inputs.PR_ID }}
           ls -la

@@ -91,12 +91,12 @@ jobs:
     - name: test
       run: |-
         pwd
-        mkdir ${{ matrix.path }}
         cd ./${{ matrix.path }}
         touch Hello.txt
         touch World.txt
         mkdir HelloWorld
         cd ./HelloWorld
+        pwd
         touch helloWorld.txt
         cd ../../
         ls -la
