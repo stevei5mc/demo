@@ -179,6 +179,7 @@ jobs:
     - PR-Approve
     runs-on: ubuntu-latest
     steps:
+      - run: pwd
       - name: PR review message
         if: needs.initialize.outputs.PR_Approve == 'true' && needs.initialize.outputs.Deploy_gitHub_pages == 'false'
         uses: miry/prcomment@v0.1.3
