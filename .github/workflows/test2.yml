@@ -15,8 +15,8 @@ jobs:
       with:
         java-version: '17'
         distribution: 'temurin'
+        cache: maven
     - name: 构建
       run: |
         mvn -B package --file pom.xml
         mkdir staging
-        cp target/*.jar staging
