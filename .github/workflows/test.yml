@@ -90,8 +90,6 @@ jobs:
     #     key: ${{ runner.os }}-${{ hashFiles('**/test.txt') }}
     - name: test
       run: |-
-        git config --show-origin --get user.email
-        git config --show-origin --get user.name
         pwd
         cd ./${{ matrix.path }}
         touch ${{ matrix.name }}-1.txt
