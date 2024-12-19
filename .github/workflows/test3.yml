@@ -1,0 +1,29 @@
+name: test3
+on:
+  push:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: 拉取代码-1
+      uses: actions/checkout@v4
+      with:
+        submodules: true
+        repository: 'stevei5mc/ServerHelper'
+    - name: list dir info 1
+      run: |
+        pwd
+        ls -la
+    - name: 拉取代码-2
+      uses: actions/checkout@v4
+      with:
+        submodules: true
+        repository: 'stevei5mc/McStartServer'
+        path: ./script
+    - name: list dir info 2
+      run: |
+        pwd
+        ls -la
+        cd ./script
+        pwd
+        ls -la        
