@@ -26,7 +26,7 @@ on:
         description: "Additional functions"
         required: false
         default: 'warning'
-        type: choice
+        type: None
         options:
         - None
         - PR Approve
