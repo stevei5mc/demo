@@ -184,7 +184,7 @@ jobs:
       #       ${{ needs.initialize.outputs.url }}
     
   release:
-    if: A == B
+    if: needs.initialize.outputs.PR_Approve == 'B'
     needs: PR-Approve
     runs-on: ubuntu-latest
     steps:
