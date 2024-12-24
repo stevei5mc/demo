@@ -121,7 +121,7 @@ jobs:
         run: |
           ls -la
           gh pr checkout ${{ inputs.PR_ID }}
-          ls -la
+          lsa -la
       - uses: actions/setup-node@v4
         with:
           node-version: 18
