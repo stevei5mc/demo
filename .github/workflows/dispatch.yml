@@ -45,7 +45,7 @@ jobs:
         echo "additional-functions=${{ inputs.additional-functions }}" >> $GITHUB_OUTPUT
         echo "PR_ID=${{ inputs.PR_ID }}" >> $GITHUB_OUTPUT
     - name: Settings info
-      id: settingsInfo
+      id: settings_info
       run: |
         if [[ "${{ inputs.additional-functions }}" == "PR Approve" || "${{ inputs.additional-functions }}" == "PR Approve and Deploy gitHub pages" ]]; then
           echo "PR_Approve=true" >> $GITHUB_OUTPUT
@@ -207,7 +207,7 @@ jobs:
           echo "PR_ID=${{ inputs.PR_ID }}" >> $GITHUB_OUTPUT
           echo "url=$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" >> $GITHUB_OUTPUT
       - name: Settings info
-        id: settingsInfo
+        id: settings_info
         run: |
           if [[ "${{ inputs.additional-functions }}" == "PR Approve" || "${{ inputs.additional-functions }}" == "PR Approve and Deploy gitHub pages" ]]; then
             echo "PR_Approve=true" >> $GITHUB_OUTPUT
