@@ -239,7 +239,8 @@ jobs:
         with:
           issue: ${{ inputs.PR_ID }}
           message-path: ./.github/message_template/failure_messgae.txt
-          message: ${{ steps.get_info.outputs.url }}
+          find: action_url
+          replace: ${{ steps.get_info.outputs.url }}
         # uses: miry/prcomment@v0.1.3
         # with:
         #   msg: |
