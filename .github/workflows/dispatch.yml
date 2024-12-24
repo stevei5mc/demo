@@ -234,7 +234,7 @@ jobs:
         with:
           submodules: true
       - name: PR review message
-        if: needs.initialize.outputs.PR_Approve == 'true' || needs.initialize.outputs.additional-functions == 'PR Approve and Deploy gitHub pages'
+        if: steps.settings_info.outputs.PR_Approve == 'true' || steps.settings_info.outputs.additional-functions == 'PR Approve and Deploy gitHub pages'
         uses: mshick/add-pr-comment@v2.8.2
         with:
           issue: ${{ inputs.PR_ID }}
