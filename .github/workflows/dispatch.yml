@@ -15,10 +15,10 @@ on:
       additional-functions:
         description: "Additional functions"
         required: false
-        default: 'None'
+        default: 'Not used'
         type: choice
         options:
-        - None
+        - Not used
         - PR Approve
         - Deploy gitHub pages
         - PR Approve and Deploy gitHub pages
@@ -79,7 +79,7 @@ jobs:
       with:
         submodules: true
     - name: 拉取代码(批准PR专用)
-      if: needs.initialize.outputs.PR_Approve == 'true'
+      if: needs.initialize.outputs.additional-functions == 'true'
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
@@ -123,24 +123,20 @@ jobs:
           ls -la
           gh pr checkout ${{ inputs.PR_ID }}
           lsa -la
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 18
+      # - uses: actions/setup-node@v4
+      #   with:
+      #     node-version: 18
           # cache: npm
-      # - name: 构建
-      #     cd Docusaurus
-      #     npm ci
-      #     npm run build
-      #     cd ../
-      #     mkdir build
-      #     cp -r ./Docusaurus/build/* build
+      - name: 构建
+        run: bash Ttest.sh
       # - name: 上传构建
       #   uses: actions/upload-pages-artifact@v3
       #   with:
       #     path: build
 
   deploy-gitHub-pages:
-    if: always() && needs.initialize.outputs.Deploy_github_pages == 'true'
+    if: needs.initialize.outputs.Deploy_github_pages == 'PR Approve and Deploy gitHub pages' || 
+      (always() && needs.initialize.outputs.Deploy_github_pages == 'Deploy gitHub pages' && needs.build-Docusaurus.result = success)
     name: Deploy gitHub pages
     needs: PR-Approve
     # 给予 GITHUB_TOKEN 进行 Pages 部署所必须的权限
