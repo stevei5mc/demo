@@ -140,12 +140,9 @@ jobs:
       #     path: build
 
   deploy-gitHub-pages:
-    if: needs.initialize.outputs.Deploy_github_pages == 'true'
+    if: always() && needs.initialize.outputs.Deploy_github_pages == 'true'
     name: Deploy gitHub pages
-    needs: 
-    - build-Docusaurus
-    - build-plugin
-    - PR-Approve
+    needs: PR-Approve
     # 给予 GITHUB_TOKEN 进行 Pages 部署所必须的权限
     permissions:
       pages: write # 以部署到 Pages
@@ -188,11 +185,8 @@ jobs:
       #       ${{ needs.initialize.outputs.url }}
     
   release:
-    if: needs.initialize.outputs.PR_Approve == 'B'
-    needs: 
-    - build-Docusaurus
-    - build-plugin
-    - PR-Approve
+    if: always() && needs.initialize.outputs.PR_Approve == 'B'
+    needs: PR-Approve
     runs-on: ubuntu-latest
     steps:
       - name: test
