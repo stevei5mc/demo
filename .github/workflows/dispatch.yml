@@ -136,7 +136,7 @@ jobs:
 
   deploy-gitHub-pages:
     if: needs.initialize.outputs.Deploy_github_pages == 'PR Approve and Deploy gitHub pages' || 
-      (always() && needs.initialize.outputs.Deploy_github_pages == 'Deploy gitHub pages' && needs.build-Docusaurus.result == success)
+      (always() && needs.initialize.outputs.Deploy_github_pages == 'Deploy gitHub pages' && needs.build-Docusaurus.result == 'success')
     name: Deploy gitHub pages
     needs: PR-Approve
     # 给予 GITHUB_TOKEN 进行 Pages 部署所必须的权限
