@@ -140,7 +140,7 @@ jobs:
       #     path: build
 
   deploy-gitHub-pages:
-    if: always() && needs.initialize.outputs.Deploy_github_pages == 'true'
+    if: success() && always() && needs.initialize.outputs.Deploy_github_pages == 'true'
     name: Deploy gitHub pages
     needs: PR-Approve
     # 给予 GITHUB_TOKEN 进行 Pages 部署所必须的权限
@@ -159,7 +159,7 @@ jobs:
       - run: pwd
 
   PR-Approve:
-    if: always() && needs.initialize.outputs.PR_Approve == 'true'
+    if: success() && always() && needs.initialize.outputs.PR_Approve == 'true'
     name: PR Approve
     needs: 
     - build-Docusaurus
@@ -185,7 +185,7 @@ jobs:
       #       ${{ needs.initialize.outputs.url }}
     
   release:
-    if: always() && needs.initialize.outputs.PR_Approve == 'B'
+    if: success() && always() && needs.initialize.outputs.PR_Approve == 'B'
     needs: PR-Approve
     runs-on: ubuntu-latest
     steps:
@@ -194,55 +194,55 @@ jobs:
 
   aftermath-of-failure:
     # if: ${{ failure() }}
-    if:  always() && failure()
+    if: always() && failure()
     name: Aftermath of failure
     needs: 
     - deploy-gitHub-pages
     - release
     runs-on: ubuntu-latest
     steps:
-      # - name: 获取信息
-      #   id: get_info
-      #   run: |
-      #     echo "repo_name=${GITHUB_REPOSITORY/${{ github.repository_owner }}\//}" >> $GITHUB_OUTPUT
-      #     echo "additional-functions=${{ inputs.additional-functions }}" >> $GITHUB_OUTPUT
-      #     echo "PR_ID=${{ inputs.PR_ID }}" >> $GITHUB_OUTPUT
-      #     echo "url=$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" >> $GITHUB_OUTPUT
-      # - name: Settings info
-      #   id: settings_info
-      #   run: |
-      #     if [[ "${{ inputs.additional-functions }}" == "PR Approve" || "${{ inputs.additional-functions }}" == "PR Approve and Deploy gitHub pages" ]]; then
-      #       echo "PR_Approve=true" >> $GITHUB_OUTPUT
-      #     else
-      #       echo "PR_Approve=false" >> $GITHUB_OUTPUT
-      #     fi
-      #     if [[ "${{ inputs.additional-functions }}" == "Deploy gitHub pages" || "${{ inputs.additional-functions }}" == "PR Approve and Deploy gitHub pages" ]]; then
-      #       echo "Deploy_github_pages=true" >> $GITHUB_OUTPUT
-      #     else
-      #       echo "Deploy_github_pages=false" >> $GITHUB_OUTPUT
-      #     fi
+      - name: 获取信息
+        id: get_info
+        run: |
+          echo "repo_name=${GITHUB_REPOSITORY/${{ github.repository_owner }}\//}" >> $GITHUB_OUTPUT
+          echo "additional-functions=${{ inputs.additional-functions }}" >> $GITHUB_OUTPUT
+          echo "PR_ID=${{ inputs.PR_ID }}" >> $GITHUB_OUTPUT
+          echo "url=$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" >> $GITHUB_OUTPUT
+      - name: Settings info
+        id: settings_info
+        run: |
+          if [[ "${{ inputs.additional-functions }}" == "PR Approve" || "${{ inputs.additional-functions }}" == "PR Approve and Deploy gitHub pages" ]]; then
+            echo "PR_Approve=true" >> $GITHUB_OUTPUT
+          else
+            echo "PR_Approve=false" >> $GITHUB_OUTPUT
+          fi
+          if [[ "${{ inputs.additional-functions }}" == "Deploy gitHub pages" || "${{ inputs.additional-functions }}" == "PR Approve and Deploy gitHub pages" ]]; then
+            echo "Deploy_github_pages=true" >> $GITHUB_OUTPUT
+          else
+            echo "Deploy_github_pages=false" >> $GITHUB_OUTPUT
+          fi
       - name:  Output info list
         run: |
           echo Bases info:
           echo Build plugin : ${{ inputs.build-plugin }}
           echo Build docusaurus : ${{ inputs.build-Docusaurus }}
-          echo Artifact name: ${{ needs.initialize.outputs.repo_name }}-Dispatch-Build_${{ github.run_number }}
+          echo Artifact name: ${{ steps.get_info.outputs.repo_name }}-Dispatch-Build_${{ github.run_number }}
           echo Additional functions info:
-          echo PR Approve: ${{ needs.initialize.outputs.PR_Approve }}
+          echo PR Approve: ${{ steps.settings_info.outputs.PR_Approve }}
           echo PR Approve ID : ${{ inputs.PR_ID }}
-          echo Deploy github pages: ${{ needs.initialize.outputs.Deploy_github_pages }}
+          echo Deploy github pages: ${{ steps.settings_info.outputs.Deploy_github_pages }}
       - name: 拉取代码
         uses: actions/checkout@v4
         with:
           submodules: true
-      # - name: PR review message
-      #   if: needs.initialize.outputs.PR_Approve == 'true'
-      #   uses: mshick/add-pr-comment@v2.8.2
-      #   with:
-      #     issue: ${{ inputs.PR_ID }}
-      #     message-path: ./.github/message_template/failure_messgae.txt
-      #     find: action_url
-      #     replace: ${{ steps.get_info.outputs.url }}
+      - name: PR review message
+        if: steps.settings_info.outputs.PR_Approve == 'true'
+        uses: mshick/add-pr-comment@v2.8.2
+        with:
+          issue: ${{ inputs.PR_ID }}
+          message-path: ./.github/message_template/failure_messgae.txt
+          find: action_url
+          replace: ${{ steps.get_info.outputs.url }}
         # uses: miry/prcomment@v0.1.3
         # with:
         #   msg: |
