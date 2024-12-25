@@ -132,7 +132,7 @@ jobs:
           pwd
           ls -la
           ls -la .github/workflows
-          bash .github/workflows/Ttest.sh
+          bash .github/workflows/TTest.sh
       # - name: 上传构建
       #   uses: actions/upload-pages-artifact@v3
       #   with:
