@@ -67,6 +67,7 @@ jobs:
         echo PR Approve: ${{ steps.settings_info.outputs.PR_Approve }}
         echo PR Approve ID : ${{ inputs.PR_ID }}
         echo Deploy github pages: ${{ steps.settings_info.outputs.Deploy_github_pages }}
+  
   build-plugin:
     if: ${{ inputs.build-plugin }}
     name: Build plugin
@@ -139,7 +140,7 @@ jobs:
       #     path: build
 
   deploy-gitHub-pages:
-    if: needs.initialize.outputs.Deploy_github_pages == 'true' || needs.initialize.outputs.additional-functions == 'PR Approve and Deploy gitHub pages'
+    if: always() && needs.initialize.outputs.Deploy_github_pages == 'true' || needs.initialize.outputs.additional-functions == 'PR Approve and Deploy gitHub pages'
     name: Deploy gitHub pages
     needs: PR-Approve
     # 给予 GITHUB_TOKEN 进行 Pages 部署所必须的权限
@@ -158,7 +159,7 @@ jobs:
       - run: pwd
 
   PR-Approve:
-    if: needs.initialize.outputs.PR_Approve == 'true' || needs.initialize.outputs.additional-functions == 'PR Approve and Deploy gitHub pages'
+    if: always() && needs.initialize.outputs.PR_Approve == 'true' || needs.initialize.outputs.additional-functions == 'PR Approve and Deploy gitHub pages'
     name: PR Approve
     needs: 
     - build-Docusaurus
@@ -184,7 +185,7 @@ jobs:
       #       ${{ needs.initialize.outputs.url }}
     
   release:
-    if: needs.initialize.outputs.PR_Approve == 'B'
+    if: always() && needs.initialize.outputs.PR_Approve == 'B'
     needs: PR-Approve
     runs-on: ubuntu-latest
     steps:
@@ -192,7 +193,8 @@ jobs:
         run: echo hello world
 
   aftermath-of-failure:
-    if: ${{ failure() }}
+    # if: ${{ failure() }}
+    if:  always() && failure()
     name: Aftermath of failure
     needs: 
     - deploy-gitHub-pages
