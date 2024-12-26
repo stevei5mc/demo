@@ -77,7 +77,9 @@ jobs:
         # cache: maven
     - name: 构建
       run: |
-        echo initialize: ${{ needs.initialize.result }}
+          echo initialize: ${{ needs.initialize.result }}
+          echo Additional functions ${{ needs.initialize.outputs.additional-functions }}
+          echo REPO NAME ${{ needs.initialize.outputs.repo_name }}
     # - name: 上传构建
     #   uses: actions/upload-artifact@v4
     #   with:
