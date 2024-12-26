@@ -49,7 +49,7 @@ jobs:
         echo Build docusaurus : ${{ inputs.build-Docusaurus }}
         echo Artifact name: ${{ steps.get_info.outputs.repo_name }}-Dispatch-Build_${{ github.run_number }}
         echo Additional functions info:
-        echo Functions: ${{ input.additional-functions }}
+        echo Functions: ${{ inputs.additional-functions }}
         echo PR ID : ${{ inputs.PR_ID }}
   
   build-plugin:
