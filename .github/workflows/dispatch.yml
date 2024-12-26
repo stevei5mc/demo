@@ -130,10 +130,16 @@ jobs:
     - build-plugin
     runs-on: ubuntu-latest
     steps:
-      - name: 拉取代码
-        uses: actions/checkout@v4
-        with:
+      - name: test
+        run: |
           submodules: true
+          echo initialize: ${{ needs.initialize.result }}
+          echo build plugin: ${{ needs.build-plugin.result }}
+          echo build Docusaurus: ${{ needs.build-Docusaurus.result }}
+          echo PR Approve: ${{ needs.PR-Approve.result }}
+          echo Additional functions ${{ needs.initialize.outputs.additional-functions }}
+          echo REPO NAME ${{ needs.initialize.outputs.repo_name }}
+          echo name ${{ env.repo }}
       # - name: 批准PR
       #   uses: hmarr/auto-approve-action@v4.0.0
       #   with:
