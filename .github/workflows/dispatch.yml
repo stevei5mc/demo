@@ -132,7 +132,6 @@ jobs:
     steps:
       - name: test
         run: |
-          submodules: true
           echo initialize: ${{ needs.initialize.result }}
           echo build plugin: ${{ needs.build-plugin.result }}
           echo build Docusaurus: ${{ needs.build-Docusaurus.result }}
