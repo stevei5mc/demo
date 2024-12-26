@@ -191,7 +191,13 @@ jobs:
           echo Additional functions ${{ needs.initialize.outputs.additional-functions }}
           echo REPO NAME ${{ needs.initialize.outputs.repo_name }}
           echo name ${{ env.repo }}
-
+          mkdir test
+          touch test/test-1.txt
+      - name: 收集构建文件
+        uses: actions/upload-artifact@v4.3.3
+        with:
+          name: ${{ needs.initialize.outputs.repo_name }}
+          path: test
   aftermath-of-failure:
     # if: ${{ failure() }}
     if: failure()
