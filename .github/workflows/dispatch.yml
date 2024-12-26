@@ -170,6 +170,10 @@ jobs:
     #   url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
+      - name: 拉取代码
+        uses: actions/checkout@v4
+        with:
+          submodules: true
 
   release:
     if: needs.initialize.outputs.additional-functions == 'Deploy gitHub pages' || (always() && needs.initialize.outputs.additional-functions == 'PR Approve and Deploy gitHub pages' && needs.build-Docusaurus.result == 'success' && needs.build-plugin.result == 'success')
