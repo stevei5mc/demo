@@ -121,7 +121,7 @@ jobs:
       - run: pwd
 
   PR-Approve:
-    if: needs.initialize.outputs.additional-functions == 'Deploy gitHub pages' || needs.initialize.outputs.additional-functions == 'PR Approve and Deploy gitHub pages'
+    if: needs.initialize.outputs.additional-functions == 'PR Approve' || needs.initialize.outputs.additional-functions == 'PR Approve and Deploy gitHub pages'
     name: PR Approve
     needs: 
     - build-Docusaurus
@@ -172,6 +172,8 @@ jobs:
     if: needs.initialize.outputs.additional-functions == 'PR Approve and Deploy gitHub pages' || (always() && needs.initialize.outputs.additional-functions == 'Deploy gitHub pages' && needs.build-Docusaurus.result == 'success' && needs.build-plugin.result == 'success')
     needs: PR-Approve 
     runs-on: ubuntu-latest
+    env:
+      repo: ${{ needs.initialize.outputs.repo_name }}
     steps:
       - name: test
         run: |
@@ -179,8 +181,9 @@ jobs:
           echo build plugin: ${{ needs.build-plugin.result }}
           echo build Docusaurus: ${{ needs.build-Docusaurus.result }}
           echo PR Approve: ${{ needs.PR-Approve.result }}
-          echo ${{ needs.initialize.outputs.additional-functions }}
-          echo ${{ needs.initialize.outputs.repo_name }}
+          echo Additional functions ${{ needs.initialize.outputs.additional-functions }}
+          echo REPO NAME ${{ needs.initialize.outputs.repo_name }}
+          echo name ${{ env.repo }}
 
   aftermath-of-failure:
     # if: ${{ failure() }}
