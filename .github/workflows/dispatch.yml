@@ -148,7 +148,7 @@ jobs:
 
 
   deploy-gitHub-pages:
-    if: needs.initialize.outputs.additional-functions == 'PR Approve and Deploy gitHub pages' || (needs.initialize.outputs.additional-functions == 'Deploy gitHub pages' && needs.build-Docusaurus.result == 'success' && needs.build-plugin.result == 'success')
+    if: (needs.initialize.outputs.additional-functions == 'PR Approve and Deploy gitHub pages' && needs.build-Docusaurus.result == 'success' && needs.build-plugin.result == 'success') || (needs.initialize.outputs.additional-functions == 'Deploy gitHub pages' && needs.build-Docusaurus.result == 'success' && needs.build-plugin.result == 'success')
     name: Deploy gitHub pages
     needs: 
     - build-Docusaurus
@@ -174,7 +174,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: test
-        run: echo hello world
+        run: |
+          echo initialize: ${{ needs.initialize.result }}
+          echo build plugin: ${{ needs.build-plugin.result }}
+          echo build Docusaurus: ${{ needs.build-Docusaurus.result }}
+          echo PR Approve: ${{ needs.PR-Approve.result }}
+          echo ${{ needs.initialize.outputs.additional-functions }}
+          echo ${{ needs.initialize.outputs.repo_name }}
 
   aftermath-of-failure:
     # if: ${{ failure() }}
