@@ -35,8 +35,6 @@ jobs:
       additional-functions: ${{ steps.get_info.outputs.additional-functions }}
       PR_ID: ${{ steps.get_info.outputs.PR_ID }}
       url: ${{ steps.get_info.outputs.url }}
-      PR_Approve: ${{ steps.settings_info.outputs.PR_Approve }}
-      Deploy_github_pages: ${{ steps.settings_info.outputs.Deploy_github_pages }}
     steps:
     - name: 获取信息
       id: get_info
@@ -44,19 +42,6 @@ jobs:
         echo "repo_name=${GITHUB_REPOSITORY/${{ github.repository_owner }}\//}" >> $GITHUB_OUTPUT
         echo "additional-functions=${{ inputs.additional-functions }}" >> $GITHUB_OUTPUT
         echo "PR_ID=${{ inputs.PR_ID }}" >> $GITHUB_OUTPUT
-    - name: Settings info
-      id: settings_info
-      run: |
-        if [[ "${{ inputs.additional-functions }}" == "PR Approve" || "${{ inputs.additional-functions }}" == "PR Approve and Deploy gitHub pages" ]]; then
-          echo "PR_Approve=true" >> $GITHUB_OUTPUT
-        else
-          echo "PR_Approve=false" >> $GITHUB_OUTPUT
-        fi
-        if [[ "${{ inputs.additional-functions }}" == "Deploy gitHub pages" || "${{ inputs.additional-functions }}" == "PR Approve and Deploy gitHub pages" ]]; then
-          echo "Deploy_github_pages=true" >> $GITHUB_OUTPUT
-        else
-          echo "Deploy_github_pages=false" >> $GITHUB_OUTPUT
-        fi
     - name:  Output info list
       run: |
         echo Bases info:
@@ -64,9 +49,8 @@ jobs:
         echo Build docusaurus : ${{ inputs.build-Docusaurus }}
         echo Artifact name: ${{ steps.get_info.outputs.repo_name }}-Dispatch-Build_${{ github.run_number }}
         echo Additional functions info:
-        echo PR Approve: ${{ steps.settings_info.outputs.PR_Approve }}
-        echo PR Approve ID : ${{ inputs.PR_ID }}
-        echo Deploy github pages: ${{ steps.settings_info.outputs.Deploy_github_pages }}
+        echo Functions: ${{ input.additional-functions }}
+        echo PR ID : ${{ inputs.PR_ID }}
   
   build-plugin:
     if: ${{ inputs.build-plugin }}
@@ -132,27 +116,12 @@ jobs:
           pwd
           ls -la
           ls -la .github/workflows
-          bash .github/workflows/TTest.sh
+          bash .github/workflows/TTest.sh "ABC" "DEF" "GHI"
       # - name: 上传构建
       #   uses: actions/upload-pages-artifact@v3
       #   with:
       #     path: build
 
-  deploy-gitHub-pages:
-    if: needs.initialize.outputs.Deploy_github_pages == 'PR Approve and Deploy gitHub pages' || 
-      (always() && needs.initialize.outputs.Deploy_github_pages == 'Deploy gitHub pages' && needs.build-Docusaurus.result == 'success')
-    name: Deploy gitHub pages
-    needs: PR-Approve
-    # 给予 GITHUB_TOKEN 进行 Pages 部署所必须的权限
-    permissions:
-      pages: write # 以部署到 Pages
-      id-token: write # 以验证部署来自恰当的源
-    # 部署到 Github Pages 环境
-    # environment:
-    #   name: github-pages
-    #   url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    steps:
       # - name: 部署到 GitHub Pages
       #   id: deployment
       #   uses: actions/deploy-pages@v4
@@ -183,10 +152,28 @@ jobs:
       #       Thank you very much for your contribution to this event。
 
       #       ${{ needs.initialize.outputs.url }}
-    
+
+
+  deploy-gitHub-pages:
+    if: needs.initialize.outputs.additional-functions == 'Deploy gitHub pages' || (needs.initialize.outputs.additional-functions == 'PR Approve and Deploy gitHub pages' && needs.build-Docusaurus.result == 'success' && needs.build-plugin.result == 'success')
+    name: Deploy gitHub pages
+    needs: 
+    - build-Docusaurus
+    - build-plugin
+    # 给予 GITHUB_TOKEN 进行 Pages 部署所必须的权限
+    permissions:
+      pages: write # 以部署到 Pages
+      id-token: write # 以验证部署来自恰当的源
+    # 部署到 Github Pages 环境
+    # environment:
+    #   name: github-pages
+    #   url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+
   release:
-    if: always() && needs.initialize.outputs.PR_Approve == 'B'
-    needs: PR-Approve
+    if: needs.initialize.outputs.additional-functions == 'Deploy gitHub pages' || (always() && needs.initialize.outputs.additional-functions == 'PR Approve and Deploy gitHub pages' && needs.build-Docusaurus.result == 'success' && needs.build-plugin.result == 'success')
+    needs: PR-Approve 
     runs-on: ubuntu-latest
     steps:
       - name: test
@@ -197,6 +184,7 @@ jobs:
     if: failure()
     name: Aftermath of failure
     needs: 
+    - PR-Approve
     - deploy-gitHub-pages
     - release
     runs-on: ubuntu-latest
