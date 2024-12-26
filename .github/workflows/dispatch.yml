@@ -121,7 +121,7 @@ jobs:
       - run: pwd
 
   PR-Approve:
-    if: needs.initialize.outputs.PR_Approve == 'true'
+    if: needs.initialize.outputs.additional-functions == 'Deploy gitHub pages'
     name: PR Approve
     needs: 
     - build-Docusaurus
