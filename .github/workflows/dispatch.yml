@@ -119,7 +119,7 @@ jobs:
           ls -la
           ls -la .github/workflows
           bash .github/workflows/TTest.sh "ABC" "DEF" "GHI"
-          mkdir
+          mkdir test
           touch test/test-1.txt
       - name: 收集构建文件
         uses: actions/upload-artifact@v4.3.3
