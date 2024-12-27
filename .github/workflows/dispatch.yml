@@ -80,6 +80,13 @@ jobs:
           echo initialize: ${{ needs.initialize.result }}
           echo Additional functions ${{ needs.initialize.outputs.additional-functions }}
           echo REPO NAME ${{ needs.initialize.outputs.repo_name }}
+          mkdir test
+          touch test/test-1.txt
+    - name: 收集构建文件
+      uses: actions/upload-artifact@v4.3.3
+      with:
+        name: ${{ needs.initialize.outputs.repo_name }}-2-1
+        path: test
     # - name: 上传构建
     #   uses: actions/upload-artifact@v4
     #   with:
@@ -112,15 +119,12 @@ jobs:
           ls -la
           ls -la .github/workflows
           bash .github/workflows/TTest.sh "ABC" "DEF" "GHI"
-      # - name: 上传构建
-      #   uses: actions/upload-pages-artifact@v3
-      #   with:
-      #     path: build
-
-      # - name: 部署到 GitHub Pages
-      #   id: deployment
-      #   uses: actions/deploy-pages@v4
-      - run: pwd
+          touch test/test-1.txt
+      - name: 收集构建文件
+        uses: actions/upload-artifact@v4.3.3
+        with:
+          name: ${{ needs.initialize.outputs.repo_name }}-2-2
+          path: test
 
   PR-Approve:
     if: needs.initialize.outputs.additional-functions == 'PR Approve' || needs.initialize.outputs.additional-functions == 'PR Approve and Deploy gitHub pages'
@@ -155,11 +159,9 @@ jobs:
 
 
   deploy-gitHub-pages:
-    if: (needs.initialize.outputs.additional-functions == 'PR Approve and Deploy gitHub pages' && needs.build-Docusaurus.result == 'success' && needs.build-plugin.result == 'success') || (needs.initialize.outputs.additional-functions == 'Deploy gitHub pages' && needs.build-Docusaurus.result == 'success' && needs.build-plugin.result == 'success')
+    if: needs.initialize.outputs.additional-functions == 'PR Approve and Deploy gitHub pages' || (always() && needs.initialize.outputs.additional-functions == 'Deploy gitHub pages' && needs.build-Docusaurus.result == 'success' && needs.build-plugin.result == 'success')
     name: Deploy gitHub pages
-    needs: 
-    - build-Docusaurus
-    - build-plugin
+    needs: PR-Approve 
     # 给予 GITHUB_TOKEN 进行 Pages 部署所必须的权限
     permissions:
       pages: write # 以部署到 Pages
@@ -176,8 +178,10 @@ jobs:
           submodules: true
 
   release:
-    if: needs.initialize.outputs.additional-functions == 'PR Approve and Deploy gitHub pages' || (always() && needs.initialize.outputs.additional-functions == 'Deploy gitHub pages' && needs.build-Docusaurus.result == 'success' && needs.build-plugin.result == 'success')
-    needs: PR-Approve 
+    if: (needs.initialize.outputs.additional-functions == 'PR Approve and Deploy gitHub pages' && needs.build-Docusaurus.result == 'success' && needs.build-plugin.result == 'success') || (needs.initialize.outputs.additional-functions == 'Deploy gitHub pages' && needs.build-Docusaurus.result == 'success' && needs.build-plugin.result == 'success')
+    needs: 
+    - build-Docusaurus
+    - build-plugin
     runs-on: ubuntu-latest
     env:
       repo: ${{ needs.initialize.outputs.repo_name }}
@@ -193,10 +197,13 @@ jobs:
           echo name ${{ env.repo }}
           mkdir test
           touch test/test-1.txt
+      - name: test2
+        if: (needs.initialize.outputs.additional-functions == 'PR Approve and Deploy gitHub pages' && needs.build-Docusaurus.result == 'success' && needs.build-plugin.result == 'success') || (needs.initialize.outputs.additional-functions == 'Deploy gitHub pages' && needs.build-Docusaurus.result == 'success' && needs.build-plugin.result == 'success')
+        run: echo hello world
       - name: 收集构建文件
         uses: actions/upload-artifact@v4.3.3
         with:
-          name: ${{ needs.initialize.outputs.repo_name }}
+          name: ${{ needs.initialize.outputs.repo_name }}-3-2
           path: test
   aftermath-of-failure:
     # if: ${{ failure() }}
