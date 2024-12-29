@@ -21,9 +21,13 @@ on:
         - Not used
         - PR Approve
         - Deploy gitHub pages
-        - PR Approve and Deploy gitHub pages
+        - Release snapshot version
+        - Release latest version
       PR_ID:
         description: 'PR Approve ID'
+        required: false
+      Release_version:
+        description: 'Release version'
         required: false
 
 jobs:
@@ -58,40 +62,16 @@ jobs:
     needs: initialize
     runs-on: ubuntu-latest
     steps:
-    - name: 拉取代码
-      uses: actions/checkout@v4
-      with:
-        submodules: true
-    - name: 拉取代码(批准PR专用)
-      if: needs.initialize.outputs.additional-functions == 'true'
-      env:
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name:  Output info list
       run: |
-          ls -la
-          ls -la
-    - name: 安装java8
-      uses: actions/setup-java@v4
-      with:
-        java-version: '8'
-        distribution: 'temurin'
-        # cache: maven
-    - name: 构建
-      run: |
-          echo initialize: ${{ needs.initialize.result }}
-          echo Additional functions ${{ needs.initialize.outputs.additional-functions }}
-          echo REPO NAME ${{ needs.initialize.outputs.repo_name }}
-          mkdir test
-          touch test/test-1.txt
-    - name: 收集构建文件
-      uses: actions/upload-artifact@v4.3.3
-      with:
-        name: ${{ needs.initialize.outputs.repo_name }}-2-1
-        path: test
-    # - name: 上传构建
-    #   uses: actions/upload-artifact@v4
-    #   with:
-    #     name: ${{ needs.initialize.outputs.artifact_name }}
-    #     path: plugin-body/staging
+        echo Bases info:
+        echo Repository: ${{ needs.initialize.outputs.repo_name }}
+        echo Build plugin : ${{ inputs.build-plugin }}
+        echo Build docusaurus : ${{ inputs.build-Docusaurus }}
+        echo Artifact name: ${{ needs.initialize.outputs.artifact_name }}
+        echo Additional functions info:
+        echo Functions: ${{ inputs.additional-functions }}
+        echo PR ID : ${{ inputs.PR_ID }}
 
   build-Docusaurus:
     if: ${{ inputs.build-Docusaurus }}
@@ -99,87 +79,20 @@ jobs:
     needs: initialize
     runs-on: ubuntu-latest
     steps:
-      - name: 拉取代码
-        uses: actions/checkout@v4
-        with:
-          submodules: true
-      - name: 拉取代码(批准PR专用)
-        if: needs.initialize.outputs.PR_Approve == 'true'
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          ls -la
-      # - uses: actions/setup-node@v4
-      #   with:
-      #     node-version: 18
-          # cache: npm
-      - name: 构建
-        run: |
-          pwd
-          ls -la
-          ls -la .github/workflows
-          bash .github/workflows/TTest.sh "ABC" "DEF" "GHI"
-          mkdir test
-          touch test/test-1.txt
-      - name: 收集构建文件
-        uses: actions/upload-artifact@v4.3.3
-        with:
-          name: ${{ needs.initialize.outputs.repo_name }}-2-2
-          path: test
+    - name:  Output info list
+      run: |
+        echo Bases info:
+        echo Repository: ${{ needs.initialize.outputs.repo_name }}
+        echo Build plugin : ${{ inputs.build-plugin }}
+        echo Build docusaurus : ${{ inputs.build-Docusaurus }}
+        echo Artifact name: ${{ needs.initialize.outputs.artifact_name }}
+        echo Additional functions info:
+        echo Functions: ${{ inputs.additional-functions }}
+        echo PR ID : ${{ inputs.PR_ID }}
 
   PR-Approve:
-    if: needs.initialize.outputs.additional-functions == 'PR Approve' || needs.initialize.outputs.additional-functions == 'PR Approve and Deploy gitHub pages'
+    if: needs.initialize.outputs.additional-functions == 'PR Approve'
     name: PR Approve
-    needs: 
-    - build-Docusaurus
-    - build-plugin
-    runs-on: ubuntu-latest
-    steps:
-      - name: test
-        run: |
-          echo initialize: ${{ needs.initialize.result }}
-          echo build plugin: ${{ needs.build-plugin.result }}
-          echo build Docusaurus: ${{ needs.build-Docusaurus.result }}
-          echo PR Approve: ${{ needs.PR-Approve.result }}
-          echo Additional functions ${{ needs.initialize.outputs.additional-functions }}
-          echo REPO NAME ${{ needs.initialize.outputs.repo_name }}
-          echo name ${{ env.repo }}
-      # - name: 批准PR
-      #   uses: hmarr/auto-approve-action@v4.0.0
-      #   with:
-      #     pull-request-number: ${{ inputs.PR_ID }}
-      #     review-message: |
-      #       构建成功，本PR获得批准合并。如果有新的提交则自动取消本次批准！
-      #       非常感谢您对本次作出的贡献。
-
-      #       The build was successful, and this PR was approved for merging. 
-      #       If there is a new submission, this approval will be automatically canceled.
-      #       Thank you very much for your contribution to this event。
-
-      #       ${{ needs.initialize.outputs.url }}
-
-
-  deploy-gitHub-pages:
-    if: needs.initialize.outputs.additional-functions == 'PR Approve and Deploy gitHub pages' || (always() && needs.initialize.outputs.additional-functions == 'Deploy gitHub pages' && needs.build-Docusaurus.result == 'success' && needs.build-plugin.result == 'success')
-    name: Deploy gitHub pages
-    needs: PR-Approve 
-    # 给予 GITHUB_TOKEN 进行 Pages 部署所必须的权限
-    permissions:
-      pages: write # 以部署到 Pages
-      id-token: write # 以验证部署来自恰当的源
-    # 部署到 Github Pages 环境
-    # environment:
-    #   name: github-pages
-    #   url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: 拉取代码
-        uses: actions/checkout@v4
-        with:
-          submodules: true
-
-  release:
-    if: (needs.initialize.outputs.additional-functions == 'PR Approve and Deploy gitHub pages' && needs.build-Docusaurus.result == 'success' && needs.build-plugin.result == 'success') || (needs.initialize.outputs.additional-functions == 'Deploy gitHub pages' && needs.build-Docusaurus.result == 'success' && needs.build-plugin.result == 'success')
     needs: 
     - build-Docusaurus
     - build-plugin
@@ -196,16 +109,55 @@ jobs:
           echo Additional functions ${{ needs.initialize.outputs.additional-functions }}
           echo REPO NAME ${{ needs.initialize.outputs.repo_name }}
           echo name ${{ env.repo }}
-          mkdir test
-          touch test/test-1.txt
-      - name: test2
-        if: (needs.initialize.outputs.additional-functions == 'PR Approve and Deploy gitHub pages' && needs.build-Docusaurus.result == 'success' && needs.build-plugin.result == 'success') || (needs.initialize.outputs.additional-functions == 'Deploy gitHub pages' && needs.build-Docusaurus.result == 'success' && needs.build-plugin.result == 'success')
-        run: echo hello world
-      - name: 收集构建文件
-        uses: actions/upload-artifact@v4.3.3
-        with:
-          name: ${{ needs.initialize.outputs.repo_name }}-3-2
-          path: test
+
+
+  deploy-gitHub-pages:
+    if: needs.initialize.outputs.additional-functions == 'PR Approve'
+    name: Deploy gitHub pages
+    needs: 
+    - build-Docusaurus
+    - build-plugin 
+    # 给予 GITHUB_TOKEN 进行 Pages 部署所必须的权限
+    permissions:
+      pages: write # 以部署到 Pages
+      id-token: write # 以验证部署来自恰当的源
+    # 部署到 Github Pages 环境
+    # environment:
+    #   name: github-pages
+    #   url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+    - name:  Output info list
+      run: |
+        echo Bases info:
+        echo Repository: ${{ needs.initialize.outputs.repo_name }}
+        echo Build plugin : ${{ inputs.build-plugin }}
+        echo Build docusaurus : ${{ inputs.build-Docusaurus }}
+        echo Artifact name: ${{ needs.initialize.outputs.artifact_name }}
+        echo Additional functions info:
+        echo Functions: ${{ inputs.additional-functions }}
+        echo PR ID : ${{ inputs.PR_ID }}
+
+  release:
+    if: needs.initialize.outputs.additional-functions == 'PR Approve'
+    needs: 
+    - build-Docusaurus
+    - build-plugin
+    runs-on: ubuntu-latest
+    env:
+      repo: ${{ needs.initialize.outputs.repo_name }}
+    steps:
+    - name:  Output info list
+      run: |
+        echo Bases info:
+        echo Repository: ${{ needs.initialize.outputs.repo_name }}
+        echo Build plugin : ${{ inputs.build-plugin }}
+        echo Build docusaurus : ${{ inputs.build-Docusaurus }}
+        echo Artifact name: ${{ needs.initialize.outputs.artifact_name }}
+        echo Additional functions info:
+        echo Functions: ${{ inputs.additional-functions }}
+        echo PR ID : ${{ inputs.PR_ID }}
+  
   aftermath-of-failure:
     # if: ${{ failure() }}
     if: failure()
