@@ -20,10 +20,26 @@ jobs:
         submodules: true
         repository: 'stevei5mc/McStartServer'
         path: ./script
+    - name: Setup java 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: 17
+        distribution: 'temurin'
     - name: list dir info 2
       run: |
-        pwd
-        ls -la
-        cd ./script
-        pwd
-        ls -la        
+        mvn package
+        mkdir staging
+        cd ./Nukkit
+        mkdir staging
+        cp target/*.jar staging
+        cd staging
+        bash ../../.github/workflows/get_build_files_hash.sh "Nukkit"
+        cd ../../WaterdogPENukkit
+        mkdir staging
+        cp target/*.jar staging
+        cd staging
+        bash ../../.github/workflows/get_build_files_hash.sh "WaterdogPE"
+        cd ../../
+        cp ./Nukkit/staging/*.* ./staging
+        cp ./WaterdogPE/staging/*.* ./staging
+        bash .github/workflows/organize_resources.sh "${{ needs.initialize.outputs.repo_name }}"
