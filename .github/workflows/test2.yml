@@ -18,5 +18,19 @@ jobs:
         cache: maven
     - name: 构建
       run: |
-        mvn -B package --file pom.xml
+        mvn package
         mkdir staging
+        cd ./Nukkit
+        mkdir staging
+        cp target/*.jar staging
+        cd staging
+        bash ../../.github/workflows/get_build_files_hash.sh "Nukkit"
+        cd ../../WaterdogPENukkit
+        mkdir staging
+        cp target/*.jar staging
+        cd staging
+        bash ../../.github/workflows/get_build_files_hash.sh "WaterdogPE"
+        cd ../../
+        cp ./Nukkit/staging/*.* ./staging
+        cp ./WaterdogPE/staging/*.* ./staging
+        bash .github/workflows/organize_resources.sh "${{ needs.initialize.outputs.repo_name }}"
