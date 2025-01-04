@@ -25,7 +25,7 @@ jobs:
         cp target/*.jar staging
         cd staging
         bash ../../.github/workflows/get_build_files_hash.sh "Nukkit"
-        cd ../../WaterdogPENukkit
+        cd ../../WaterdogPE
         mkdir staging
         cp target/*.jar staging
         cd staging
