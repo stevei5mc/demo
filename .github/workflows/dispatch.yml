@@ -91,7 +91,7 @@ jobs:
         echo PR ID : ${{ inputs.PR_ID }}
 
   PR-Approve:
-    if: needs.initialize.outputs.additional-functions == 'PR Approve'
+    if: needs.initialize.outputs.additional-functions == 'PR Approve' && (success || failure)
     name: PR Approve
     needs: 
     - build-Docusaurus
@@ -109,10 +109,18 @@ jobs:
           echo Additional functions ${{ needs.initialize.outputs.additional-functions }}
           echo REPO NAME ${{ needs.initialize.outputs.repo_name }}
           echo name ${{ env.repo }}
+      - name: test
+        if: needs.build-Docusaurus.result == 'success' || needs.build-plugin.result == 'success'
+        run: |
+          echo ABCDEFG
+      - name: test
+        if: needs.build-Docusaurus.result != 'success' || needs.build-plugin.result != 'success'
+        run: |
+          echo HIJKLMN
 
 
   deploy-gitHub-pages:
-    if: needs.initialize.outputs.additional-functions == 'PR Approve'
+    if: needs.initialize.outputs.additional-functions == 'Deploy gitHub pages'
     name: Deploy gitHub pages
     needs: 
     - build-Docusaurus
@@ -137,86 +145,3 @@ jobs:
         echo Additional functions info:
         echo Functions: ${{ inputs.additional-functions }}
         echo PR ID : ${{ inputs.PR_ID }}
-
-  release:
-    if: needs.initialize.outputs.additional-functions == 'PR Approve'
-    needs: 
-    - build-Docusaurus
-    - build-plugin
-    runs-on: ubuntu-latest
-    env:
-      repo: ${{ needs.initialize.outputs.repo_name }}
-    steps:
-    - name:  Output info list
-      run: |
-        echo Bases info:
-        echo Repository: ${{ needs.initialize.outputs.repo_name }}
-        echo Build plugin : ${{ inputs.build-plugin }}
-        echo Build docusaurus : ${{ inputs.build-Docusaurus }}
-        echo Artifact name: ${{ needs.initialize.outputs.artifact_name }}
-        echo Additional functions info:
-        echo Functions: ${{ inputs.additional-functions }}
-        echo PR ID : ${{ inputs.PR_ID }}
-  
-  aftermath-of-failure:
-    # if: ${{ failure() }}
-    if: failure()
-    name: Aftermath of failure
-    needs: 
-    - PR-Approve
-    - deploy-gitHub-pages
-    - release
-    runs-on: ubuntu-latest
-    steps:
-      - name: 获取信息
-        id: get_info
-        run: |
-          echo "repo_name=${GITHUB_REPOSITORY/${{ github.repository_owner }}\//}" >> $GITHUB_OUTPUT
-          echo "additional-functions=${{ inputs.additional-functions }}" >> $GITHUB_OUTPUT
-          echo "PR_ID=${{ inputs.PR_ID }}" >> $GITHUB_OUTPUT
-          echo "url=$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" >> $GITHUB_OUTPUT
-      - name: Settings info
-        id: settings_info
-        run: |
-          if [[ "${{ inputs.additional-functions }}" == "PR Approve" || "${{ inputs.additional-functions }}" == "PR Approve and Deploy gitHub pages" ]]; then
-            echo "PR_Approve=true" >> $GITHUB_OUTPUT
-          else
-            echo "PR_Approve=false" >> $GITHUB_OUTPUT
-          fi
-          if [[ "${{ inputs.additional-functions }}" == "Deploy gitHub pages" || "${{ inputs.additional-functions }}" == "PR Approve and Deploy gitHub pages" ]]; then
-            echo "Deploy_github_pages=true" >> $GITHUB_OUTPUT
-          else
-            echo "Deploy_github_pages=false" >> $GITHUB_OUTPUT
-          fi
-      - name:  Output info list
-        run: |
-          echo Bases info:
-          echo Build plugin : ${{ inputs.build-plugin }}
-          echo Build docusaurus : ${{ inputs.build-Docusaurus }}
-          echo Artifact name: ${{ steps.get_info.outputs.repo_name }}-Dispatch-Build_${{ github.run_number }}
-          echo Additional functions info:
-          echo PR Approve: ${{ steps.settings_info.outputs.PR_Approve }}
-          echo PR Approve ID : ${{ inputs.PR_ID }}
-          echo Deploy github pages: ${{ steps.settings_info.outputs.Deploy_github_pages }}
-      - name: 拉取代码
-        uses: actions/checkout@v4
-        with:
-          submodules: true
-      - name: PR review message
-        if: steps.settings_info.outputs.PR_Approve == 'true'
-        uses: mshick/add-pr-comment@v2.8.2
-        with:
-          issue: ${{ inputs.PR_ID }}
-          message-path: ./.github/message_template/failure_messgae.txt
-          find: action_url
-          replace: ${{ steps.get_info.outputs.url }}
-        # uses: miry/prcomment@v0.1.3
-        # with:
-        #   msg: |
-        #     构建失败，请查看构建日志获取失败原因
-        #     确保能通过CI检查，本PR方可合并
-        #     Build failed, please check the build to obtain the reason for the failure:
-
-        #     ${{ steps.get_info.outputs.url }}
-        #   pr: ${{ inputs.PR_ID }}
-        #   token: ${{ secrets.GITHUB_TOKEN }}
