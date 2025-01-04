@@ -91,7 +91,7 @@ jobs:
         echo PR ID : ${{ inputs.PR_ID }}
 
   PR-Approve:
-    if: needs.initialize.outputs.additional-functions == 'PR Approve' && (success || failure)
+    if: needs.initialize.outputs.additional-functions == 'PR Approve' && (success() || failure())
     name: PR Approve
     needs: 
     - build-Docusaurus
