@@ -110,7 +110,7 @@ jobs:
           echo REPO NAME ${{ needs.initialize.outputs.repo_name }}
           echo name ${{ env.repo }}
       - name: test
-        if: needs.build-Docusaurus.result == 'success' || needs.build-plugin.result == 'success'
+        if: needs.build-Docusaurus.result == 'success' && needs.build-plugin.result == 'success'
         run: |
           echo ABCDEFG
       - name: test
