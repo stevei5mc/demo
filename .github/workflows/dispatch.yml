@@ -94,6 +94,7 @@ jobs:
     if: needs.initialize.outputs.additional-functions == 'PR Approve' && always()
     name: PR Approve
     needs: 
+    - initialize
     - build-Docusaurus
     - build-plugin
     runs-on: ubuntu-latest
@@ -123,6 +124,7 @@ jobs:
     if: needs.initialize.outputs.additional-functions == 'Deploy gitHub pages'
     name: Deploy gitHub pages
     needs: 
+    - initialize
     - build-Docusaurus
     - build-plugin 
     # 给予 GITHUB_TOKEN 进行 Pages 部署所必须的权限
