@@ -110,7 +110,6 @@ jobs:
           echo Additional functions ${{ needs.initialize.outputs.additional-functions }}
           echo REPO NAME ${{ needs.initialize.outputs.repo_name }}
           echo name ${{ env.repo }}
-          eco exswd
       - name: test
         if: needs.build-Docusaurus.result == 'success' && needs.build-plugin.result == 'success'
         run: |
