@@ -113,7 +113,9 @@ jobs:
         path: ${{ matrix.path }}
 
   deploy:
-    needs: TEST
+    needs: 
+    - initialize
+    - TEST
     runs-on: ubuntu-latest
     steps:
       - name: 拉取代码
@@ -145,6 +147,11 @@ jobs:
           cd ./staging
           pwd
           ls -la
+      - name: echo
+        run: |-
+          echo 仓库 ${{ needs.initialize.outputs.repo_name }}
+           所有者 ${{ github.repository_owner }}
+          echo ${{ github.repository_owner }}/${{ needs.initialize.outputs.repo_name }}
 
   debug:
     needs: 
