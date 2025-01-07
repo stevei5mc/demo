@@ -9,37 +9,29 @@ jobs:
       uses: actions/checkout@v4
       with:
         submodules: true
-        repository: 'stevei5mc/ServerHelper'
+        repository: 'stevei5mc/AutoRestart'
+    - name: 安装java8
+      uses: actions/setup-java@v4.2.1
+      with:
+        java-version: '8'
+        distribution: 'temurin'
+    - name: Extractor pom.xml gav info 
+      uses: andreacomo/maven-gav-extractor@v2.0.1
+      id: getPomInfo
+    - name: Show get pom.xml gav info
+      run: |
+        echo Group id: ${{ steps.getPomInfo.outputs.group-id }}
+        echo Artifact id: ${{ steps.getPomInfo.outputs.artifact-id }}
+        echo Version: ${{ steps.getPomInfo.outputs.version }}
     - name: list dir info 1
       run: |
-        pwd
-        ls -la
-    - name: 拉取代码-2
-      uses: actions/checkout@v4
-      with:
-        submodules: true
-        repository: 'stevei5mc/McStartServer'
-        path: ./script
-    - name: Setup java 17
-      uses: actions/setup-java@v4
-      with:
-        java-version: 17
-        distribution: 'temurin'
-    - name: list dir info 2
+        java -version
+        mvn versions:set -DnewVersion=11.45.14
+    - name: Extractor pom.xml gav info 
+      uses: andreacomo/maven-gav-extractor@v2.0.1
+      id: getPomInfo2
+    - name: Show get pom.xml gav info
       run: |
-        mvn package
-        mkdir staging
-        cd ./Nukkit
-        mkdir staging
-        cp target/*.jar staging
-        cd staging
-        bash ../../.github/workflows/get_build_files_hash.sh "Nukkit"
-        cd ../../WaterdogPENukkit
-        mkdir staging
-        cp target/*.jar staging
-        cd staging
-        bash ../../.github/workflows/get_build_files_hash.sh "WaterdogPE"
-        cd ../../
-        cp ./Nukkit/staging/*.* ./staging
-        cp ./WaterdogPE/staging/*.* ./staging
-        bash .github/workflows/organize_resources.sh "${{ needs.initialize.outputs.repo_name }}"
+        echo Group id: ${{ steps.getPomInfo2.outputs.group-id }}
+        echo Artifact id: ${{ steps.getPomInfo2.outputs.artifact-id }}
+        echo Version: ${{ steps.getPomInfo2.outputs.version }}
