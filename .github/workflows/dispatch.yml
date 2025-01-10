@@ -21,8 +21,6 @@ on:
         - Not used
         - PR Approve
         - Deploy gitHub pages
-        - Release snapshot version
-        - Release latest version
       PR_ID:
         description: 'PR Approve ID'
         required: false
@@ -55,6 +53,33 @@ jobs:
         echo Additional functions info:
         echo Functions: ${{ inputs.additional-functions }}
         echo PR ID : ${{ inputs.PR_ID }}
+    - name: Job summary
+      uses: jazanne/job-summary-action@v1.0.0
+      with:
+        summary: |
+          # Build
+          |Build name|Build enable State|
+          |:-:|:-:|
+          |Plugins|${{ inputs.build-plugin }}|
+          |Docusaurus|${{ inputs.build-Docusaurus }}|
+          ---
+          #Additional functions
+          |Functions|${{ inputs.additional-functions }}|
+          |:-:|:-:|
+          |PR ID|${{ inputs.PR_ID }}|
+    - name: Summary Action
+      uses: johngeorgewright/summary-action@v1.0.0
+      with:
+        summary: |
+          # Build
+          |Build name|Build enable State|
+          |:-:|:-:|
+          |Plugins|${{ inputs.build-plugin }}|
+          |Docusaurus|${{ inputs.build-Docusaurus }}|
+          #Additional functions
+          |Functions|${{ inputs.additional-functions }}|
+          |:-:|:-:|
+          |PR ID|${{ inputs.PR_ID }}|
   
   build-plugin:
     if: ${{ inputs.build-plugin }}
