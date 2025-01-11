@@ -58,15 +58,14 @@ jobs:
       with:
         summary: |
           # Build
-          |Build name|Build enable State|
+          |Plugins|Docusaurus|
           |:-:|:-:|
-          |Plugins|${{ inputs.build-plugin }}|
-          |Docusaurus|${{ inputs.build-Docusaurus }}|
+          |${{ inputs.build-plugin }}|${{ inputs.build-Docusaurus }}|
           ---
-          #Additional functions
-          |Functions|${{ inputs.additional-functions }}|
+          # Additional functions
+          |Functions|PR ID|
           |:-:|:-:|
-          |PR ID|${{ inputs.PR_ID }}|
+          |${{ inputs.additional-functions }}|${{ inputs.PR_ID }}|
   
   build-plugin:
     if: ${{ inputs.build-plugin }}
