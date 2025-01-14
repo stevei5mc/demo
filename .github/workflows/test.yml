@@ -101,6 +101,7 @@ jobs:
         echo 所有者 ${{ github.repository_owner }}
         echo ${{ github.repository_owner }}/${{ needs.initialize.outputs.repo_name }}
     - name: test
+      shell: bash
       run: |-
         pwd
         cd ./${{ matrix.path }}
@@ -111,7 +112,7 @@ jobs:
         pwd
         cd ../
         ls -la
-        cat $(echo ${{ format('cat .github/message_template/test.txt {0}','github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}') }}) | tee ./${{ matrix.path }}/ttttttt.txt
+        echo ${{ format('cat .github/message_template/test.txt {0}','github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}') }} | tee ./${{ matrix.path }}/ttttttt.txt
     - name: 收集构建文件
       uses: actions/upload-artifact@v4.3.3
       with:
