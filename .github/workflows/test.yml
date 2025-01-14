@@ -116,9 +116,6 @@ jobs:
       with:
         name: ${{ matrix.name }}-output
         path: ${{ matrix.path }}
-    - name: get msg
-      id: getMsg
-      run: echo "msg=<< EOF $(cat .github/message_template/test.txt) EOF" >> $GITHUB_OUTPUT
     - name: Summary Action
       uses: johngeorgewright/summary-action@v1.0.0
       with:
@@ -129,7 +126,7 @@ jobs:
           ${{ github.repository_owner }}/${{ needs.initialize.outputs.repo_name }}
           OS ${{ runner.os }}
           ---
-          ${{ format('${{ steps.getMsg.outputs.msg }} {0}','github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}') }}
+          ${{ format('$(cat .github/message_template/test.txt) {0}','github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}') }}
 
   deploy:
     needs: 
