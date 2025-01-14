@@ -111,6 +111,7 @@ jobs:
         pwd
         cd ../
         ls -la
+        cat $(echo ${{ format('cat .github/message_template/test.txt {0}','github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}')) | tee ./${{ matrix.path }}/ttttttt.txt
     - name: 收集构建文件
       uses: actions/upload-artifact@v4.3.3
       with:
@@ -126,7 +127,6 @@ jobs:
           ${{ github.repository_owner }}/${{ needs.initialize.outputs.repo_name }}
           OS ${{ runner.os }}
           ---
-          ${{ format('$(cat .github/message_template/test.txt) {0}','github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}') }}
 
   deploy:
     needs: 
