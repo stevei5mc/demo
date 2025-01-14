@@ -71,7 +71,7 @@ jobs:
         include: [
           {name: "TEST 1",path: "test1",os: ubuntu-latest},
           {name: "TEST 2",path: "test2",os: windows-latest},
-          {name: "TEST 3",path: "test3",os: ubuntu-latest}
+          {name: "TEST 3",path: "test3",os: macos-latest}
         ]
           
           # - name: "TEST 1"
@@ -80,7 +80,7 @@ jobs:
           #   path: "test2"
           # - name: "TEST 3"
           #   path: "test3"
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     needs:
     - initialize
     - build
@@ -118,7 +118,7 @@ jobs:
         path: ${{ matrix.path }}
     - name: get msg
       id: getMsg
-      run: echo "msg=$(cat .github/message_template/test.txt)" >> $GITHUB_OUTPUT
+      run: echo "msg=<< EOF $(cat .github/message_template/test.txt) EOF" >> $GITHUB_OUTPUT
     - name: Summary Action
       uses: johngeorgewright/summary-action@v1.0.0
       with:
