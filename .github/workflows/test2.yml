@@ -28,4 +28,4 @@ jobs:
       uses: mshick/add-pr-comment@v2.8.2
       with:
         issue: '2'
-        message-path: 1.txt
+        message-path: ./test/1.txt
