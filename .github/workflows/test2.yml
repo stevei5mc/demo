@@ -8,13 +8,10 @@ jobs:
     steps:
     - name: 拉取代码
       uses: actions/checkout@v4
-      with:
-        submodules: true
-        repository: 'stevei5mc/ServerHelper'
-
     - name: 构建
       run: |
         mkdir test
+        ls -la
         cp .github/message_template/test.txt ./test
         cat << EOF >> ./test/url.txt
         github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
