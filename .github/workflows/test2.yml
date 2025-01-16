@@ -28,4 +28,7 @@ jobs:
       uses: mshick/add-pr-comment@v2.8.2
       with:
         issue: '2'
-        message-path: ./test/1.txt
+        allow-repeats: true
+        message-path: |
+          ./test/test.txt
+          ./test/url.txt
