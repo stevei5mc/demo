@@ -17,29 +17,29 @@ jobs:
       id: get_info
       run: |
         STATUS_CODE=$(curl -o ./test/1.txt -s -w "%{http_code}" https://api.github.com/repos/${{ github.repository }}/releasestags/1.0.0-beta1)
-        echo "v1=${GITHUB_REPOSITORY/${{ github.repository_owner }}\//}" >> $GITHUB_OUTPUT
+        echo "v1=$STATUS_CODE" >> $GITHUB_OUTPUT
         STATUS_CODE=$(curl -o ./test/2.txt -s -w "%{http_code}" https://api.github.com/repos/${{ github.repository }}/releasestags/1.0.0-beta2)
-        echo "v2=${GITHUB_REPOSITORY/${{ github.repository_owner }}\//}" >> $GITHUB_OUTPUT
+        echo "v2=$STATUS_CODE" >> $GITHUB_OUTPUT
         STATUS_CODE=$(curl -o ./test/3.txt -s -w "%{http_code}" https://api.github.com/repos/${{ github.repository }}/releasestags/1.0.0-beta3)
-        echo "v3=${GITHUB_REPOSITORY/${{ github.repository_owner }}\//}" >> $GITHUB_OUTPUT
-        sleep 10
+        echo "v3=$STATUS_CODE" >> $GITHUB_OUTPUT
         STATUS_CODE=$(curl -o ./test/4.txt -s -w "%{http_code}" https://api.github.com/repos/${{ github.repository }}/releasestags/1.0.0-beta4)
-        echo "v4=${GITHUB_REPOSITORY/${{ github.repository_owner }}\//}" >> $GITHUB_OUTPUT
+        echo "v4=$STATUS_CODE" >> $GITHUB_OUTPUT
         STATUS_CODE=$(curl -o ./test/5.txt -s -w "%{http_code}" https://api.github.com/repos/${{ github.repository }}/releasestags/1.0.0-beta5)
-        echo "v5=${GITHUB_REPOSITORY/${{ github.repository_owner }}\//}" >> $GITHUB_OUTPUT
+        echo "v5=$STATUS_CODE" >> $GITHUB_OUTPUT
         STATUS_CODE=$(curl -o ./test/6.txt -s -w "%{http_code}" https://api.github.com/repos/${{ github.repository }}/releasestags/1.0.0-beta6)
-        echo "v6=${GITHUB_REPOSITORY/${{ github.repository_owner }}\//}" >> $GITHUB_OUTPUT
+        echo "v6=$STATUS_CODE" >> $GITHUB_OUTPUT
     - name: Output get info
       run: |
         echo v1 ${{ steps.get_info.outputs.v1 }}
         echo v2 ${{ steps.get_info.outputs.v2 }}
         echo v3 ${{ steps.get_info.outputs.v3 }}
+        sleep 10
         echo v4 ${{ steps.get_info.outputs.v4 }}
         echo v5 ${{ steps.get_info.outputs.v5 }}
         echo v6 ${{ steps.get_info.outputs.v6 }}
         ls -la 
         ls -la /home/runner/work/_temp/_runner_file_commands
-        cp /home/runner/work/_temp/_runner_file_commands/* ./test/1.txt
+        cp /home/runner/work/_temp/_runner_file_commands/* ./test
         ls -la test
     - name: 收集构建文件
       uses: actions/upload-artifact@v4.3.3
