@@ -6,19 +6,37 @@ on:
 
 env:
   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - run: curl https://api.github.com/repos/stevei5mc/AutoRestart/releases
-    - run: gh api repos/stevei5mc/AutoRestart/releases | tee temp/1.txt
-    - run: curl https://api.github.com/repos/stevei5mc/AutoRestart/releases/tags/1.0.0-beta5
-    - run: gh api repos/stevei5mc/AutoRestart/releases/tags/1.0.0-beta5 | tee temp/2.txt
-    - run: curl https://api.github.com/repos/stevei5mc/AutoRestart/releases/tags/1.0.0-beta6
-    - run: gh api repos/stevei5mc/AutoRestart/releases/tags/1.0.0-beta6 | tee temp/3.txt
-    - name: 收集构建文件
-      uses: actions/upload-artifact@v4.3.3
+    - name: GitHub API Request
+      uses: octokit/request-action@v2.4.0
+      id: get_release
       with:
-        name: temp
-        path: temp
+          route: GET /repos/stevei5mc/AutoRestart/releases/1.0.0-beta5
+          owner: octokit
+          repo: request-action
+    - run: "echo release: '${{ steps.get_release.outputs.data }}'"
+    - name: GitHub API Request 2 
+      uses: octokit/request-action@v2.4.0
+      id: get_release2
+      with:
+          route: GET /repos/stevei5mc/AutoRestart/releases/1.0.0-beta6
+          owner: octokit
+          repo: request-action
+    - run: "echo release: '${{ steps.get_release2.outputs.data }}'"
+    - name: Disable workflow commands
+      run: |
+        echo '::warning:: This is a warning message, to demonstrate that commands are being processed.'
+        stopMarker=$(uuidgen)
+        echo "::stop-commands::$stopMarker"
+        echo '::warning:: This will NOT be rendered as a warning, because stop-commands has been invoked.'
+        echo "::$stopMarker::"
+        echo '::warning:: This is a warning again, because stop-commands has been turned off.'
+    - name: echo
+      run: |
+        echo release: '${{ steps.get_release.outputs.data }}'
+        echo release: '${{ steps.get_release2.outputs.data }}'
