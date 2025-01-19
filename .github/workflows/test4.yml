@@ -12,8 +12,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - run: curl https://api.github.com/repos/stevei5mc/AutoRestart/releases
-    - run: gh api repos/stevei5mc/AutoRestart/releases
+    - run: gh api repos/stevei5mc/AutoRestart/releases | tee temp/1.txt
     - run: curl https://api.github.com/repos/stevei5mc/AutoRestart/releases/tags/1.0.0-beta5
-    - run: gh api repos/stevei5mc/AutoRestart/releases/tags/1.0.0-beta5
+    - run: gh api repos/stevei5mc/AutoRestart/releases/tags/1.0.0-beta5 | tee temp/2.txt
     - run: curl https://api.github.com/repos/stevei5mc/AutoRestart/releases/tags/1.0.0-beta6
-    - run: gh api repos/stevei5mc/AutoRestart/releases/tags/1.0.0-beta6
+    - run: gh api repos/stevei5mc/AutoRestart/releases/tags/1.0.0-beta6 | tee temp/3.txt
+    - name: 收集构建文件
+      uses: actions/upload-artifact@v4.3.3
+      with:
+        name: temp
+        path: temp
