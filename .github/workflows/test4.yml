@@ -11,10 +11,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - name: test
-      run: |
-        gh api repos/stevei5mc/AutoRestart/releases
-        echo --------------------------------------
-        gh api repos/stevei5mc/AutoRestart/releases/tags/1.0.0-beta5
-        echo --------------------------------------
-        gh api repos/stevei5mc/AutoRestart/releases/tags/1.0.0-beta6
+    - run: curl https://api.github.com/repos/stevei5mc/AutoRestart/releases
+    - run: gh api repos/stevei5mc/AutoRestart/releases
+    - run: curl https://api.github.com/repos/stevei5mc/AutoRestart/releases/tags/1.0.0-beta5
+    - run: gh api repos/stevei5mc/AutoRestart/releases/tags/1.0.0-beta5
+    - run: curl https://api.github.com/repos/stevei5mc/AutoRestart/releases/tags/1.0.0-beta6
+    - run: gh api repos/stevei5mc/AutoRestart/releases/tags/1.0.0-beta6
