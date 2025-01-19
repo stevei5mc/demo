@@ -1,0 +1,23 @@
+name: test 4
+
+on:
+  push:
+  workflow_dispatch:
+
+env:
+  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: test
+      run: |
+        gh api repos/{{ github.repository }}/releases
+        echo --------------------------------------
+        gh api repos/stevei5mc/AutoRestart/releases
+        echo --------------------------------------
+        gh api repos/stevei5mc/AutoRestart/releases/tags/1.0.0-beta5
+        echo --------------------------------------
+        gh api repos/stevei5mc/AutoRestart}/releases/1.0.0-beta6
+        echo --------------------------------------
