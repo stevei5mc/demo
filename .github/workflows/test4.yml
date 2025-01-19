@@ -16,7 +16,7 @@ jobs:
       uses: octokit/request-action@v2.4.0
       id: get_release
       with:
-          route: GET /repos/stevei5mc/AutoRestart/releases/1.0.0-beta5
+          route: GET /repos/stevei5mc/AutoRestart/tags/1.0.0-beta5
           owner: octokit
           repo: request-action
     - run: "echo release: '${{ steps.get_release.outputs.data }}'"
@@ -24,7 +24,7 @@ jobs:
       uses: octokit/request-action@v2.4.0
       id: get_release2
       with:
-          route: GET /repos/stevei5mc/AutoRestart/releases/1.0.0-beta6
+          route: GET /repos/stevei5mc/AutoRestart/tags/1.0.0-beta6
           owner: octokit
           repo: request-action
     - run: "echo release: '${{ steps.get_release2.outputs.data }}'"
