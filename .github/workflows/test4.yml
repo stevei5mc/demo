@@ -16,17 +16,17 @@ jobs:
       uses: octokit/request-action@v2.4.0
       id: get_release
       with:
-          route: GET /repos/stevei5mc/AutoRestart/tags/1.0.0-beta5
-          owner: octokit
-          repo: request-action
+          route: GET /repos/{owner}/{repo}/tags/1.0.0-beta5
+          owner: stevei5mc
+          repo: AutoRestart
     - run: "echo release: '${{ steps.get_release.outputs.data }}'"
     - name: GitHub API Request 2 
       uses: octokit/request-action@v2.4.0
       id: get_release2
       with:
-          route: GET /repos/stevei5mc/AutoRestart/tags/1.0.0-beta6
-          owner: octokit
-          repo: request-action
+          route: GET /repos/{owner}/{repo}/tags/1.0.0-beta6
+          owner: stevei5mc
+          repo: AutoRestart
     - run: "echo release: '${{ steps.get_release2.outputs.data }}'"
     - name: Disable workflow commands
       run: |
