@@ -14,7 +14,7 @@ jobs:
     steps:
     - run: mkdir test
     - name: Get status
-      id: Get status
+      id: get_info
       run: |
         STATUS_CODE=$(curl -o ./test/1.txt -s -w "%{http_code}" https://api.github.com/repos/${{ github.repository }}/releasestags/1.0.0-beta1)
         echo "v1=${GITHUB_REPOSITORY/${{ github.repository_owner }}\//}" >> $GITHUB_OUTPUT
