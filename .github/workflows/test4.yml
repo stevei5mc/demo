@@ -13,8 +13,6 @@ jobs:
     steps:
     - name: test
       run: |
-        gh api repos/{{ github.repository }}/releases
-        echo --------------------------------------
         gh api repos/stevei5mc/AutoRestart/releases
         echo --------------------------------------
         gh api repos/stevei5mc/AutoRestart/releases/tags/1.0.0-beta5
