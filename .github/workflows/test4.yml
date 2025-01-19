@@ -19,4 +19,4 @@ jobs:
         echo --------------------------------------
         gh api repos/stevei5mc/AutoRestart/releases/tags/1.0.0-beta5
         echo --------------------------------------
-        gh api repos/stevei5mc/AutoRestart/releases/1.0.0-beta6
+        gh api repos/stevei5mc/AutoRestart/releases/tags/1.0.0-beta6
