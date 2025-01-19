@@ -12,22 +12,41 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - name: GitHub API Request
-      uses: octokit/request-action@v2.4.0
-      id: get_release
+    - run: mkdir test
+    - name: Get status
+      id: Get status
+      run: |
+        STATUS_CODE=$(curl -o ./test/1.txt -s -w "%{http_code}" https://api.github.com/repos/${{ github.repository }}/releasestags/1.0.0-beta1)
+        echo "v1=${GITHUB_REPOSITORY/${{ github.repository_owner }}\//}" >> $GITHUB_OUTPUT
+        STATUS_CODE=$(curl -o ./test/2.txt -s -w "%{http_code}" https://api.github.com/repos/${{ github.repository }}/releasestags/1.0.0-beta2)
+        echo "v2=${GITHUB_REPOSITORY/${{ github.repository_owner }}\//}" >> $GITHUB_OUTPUT
+        STATUS_CODE=$(curl -o ./test/3.txt -s -w "%{http_code}" https://api.github.com/repos/${{ github.repository }}/releasestags/1.0.0-beta3)
+        echo "v3=${GITHUB_REPOSITORY/${{ github.repository_owner }}\//}" >> $GITHUB_OUTPUT
+        sleep 10
+        STATUS_CODE=$(curl -o ./test/4.txt -s -w "%{http_code}" https://api.github.com/repos/${{ github.repository }}/releasestags/1.0.0-beta4)
+        echo "v4=${GITHUB_REPOSITORY/${{ github.repository_owner }}\//}" >> $GITHUB_OUTPUT
+        STATUS_CODE=$(curl -o ./test/5.txt -s -w "%{http_code}" https://api.github.com/repos/${{ github.repository }}/releasestags/1.0.0-beta5)
+        echo "v5=${GITHUB_REPOSITORY/${{ github.repository_owner }}\//}" >> $GITHUB_OUTPUT
+        STATUS_CODE=$(curl -o ./test/6.txt -s -w "%{http_code}" https://api.github.com/repos/${{ github.repository }}/releasestags/1.0.0-beta6)
+        echo "v6=${GITHUB_REPOSITORY/${{ github.repository_owner }}\//}" >> $GITHUB_OUTPUT
+    - name: Output get info
+      run: |
+        echo v1 ${{ steps.get_info.outputs.v1 }}
+        echo v2 ${{ steps.get_info.outputs.v2 }}
+        echo v3 ${{ steps.get_info.outputs.v3 }}
+        echo v4 ${{ steps.get_info.outputs.v4 }}
+        echo v5 ${{ steps.get_info.outputs.v5 }}
+        echo v6 ${{ steps.get_info.outputs.v6 }}
+        ls -la 
+        ls -la /home/runner/work/_temp/_runner_file_commands
+        cp /home/runner/work/_temp/_runner_file_commands/* ./test/1.txt
+        ls -la test
+    - name: 收集构建文件
+      uses: actions/upload-artifact@v4.3.3
       with:
-          route: GET /repos/{owner}/{repo}/tags/1.0.0-beta5
-          owner: stevei5mc
-          repo: AutoRestart
-    - run: "echo release: '${{ steps.get_release.outputs.data }}'"
-    - name: GitHub API Request 2 
-      uses: octokit/request-action@v2.4.0
-      id: get_release2
-      with:
-          route: GET /repos/{owner}/{repo}/tags/1.0.0-beta6
-          owner: stevei5mc
-          repo: AutoRestart
-    - run: "echo release: '${{ steps.get_release2.outputs.data }}'"
+        name: test
+        path: test
+        retention-days: 2
     - name: Disable workflow commands
       run: |
         echo '::warning:: This is a warning message, to demonstrate that commands are being processed.'
