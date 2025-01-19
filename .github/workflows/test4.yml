@@ -16,17 +16,17 @@ jobs:
     - name: Get status
       id: get_info
       run: |
-        STATUS_CODE=$(curl -o ./test/1.txt -s -w "%{http_code}" https://api.github.com/repos/${{ github.repository }}/releasestags/1.0.0-beta1)
+        STATUS_CODE=$(curl -o ./test/1.txt -s -w "%{http_code}" https://api.github.com/repos/stevei5mc/AutoRestart/releases/tags/1.0.0-beta1)
         echo "v1=$STATUS_CODE" >> $GITHUB_OUTPUT
-        STATUS_CODE=$(curl -o ./test/2.txt -s -w "%{http_code}" https://api.github.com/repos/${{ github.repository }}/releasestags/1.0.0-beta2)
+        STATUS_CODE=$(curl -o ./test/2.txt -s -w "%{http_code}" https://api.github.com/repos/stevei5mc/AutoRestart/releases/tags/1.0.0-beta2)
         echo "v2=$STATUS_CODE" >> $GITHUB_OUTPUT
-        STATUS_CODE=$(curl -o ./test/3.txt -s -w "%{http_code}" https://api.github.com/repos/${{ github.repository }}/releasestags/1.0.0-beta3)
+        STATUS_CODE=$(curl -o ./test/3.txt -s -w "%{http_code}" https://api.github.com/repos/stevei5mc/AutoRestart/releases/tags/1.0.0-beta3)
         echo "v3=$STATUS_CODE" >> $GITHUB_OUTPUT
-        STATUS_CODE=$(curl -o ./test/4.txt -s -w "%{http_code}" https://api.github.com/repos/${{ github.repository }}/releasestags/1.0.0-beta4)
+        STATUS_CODE=$(curl -o ./test/4.txt -s -w "%{http_code}" https://api.github.com/repos/stevei5mc/AutoRestart/releases/tags/1.0.0-beta4)
         echo "v4=$STATUS_CODE" >> $GITHUB_OUTPUT
-        STATUS_CODE=$(curl -o ./test/5.txt -s -w "%{http_code}" https://api.github.com/repos/${{ github.repository }}/releasestags/1.0.0-beta5)
+        STATUS_CODE=$(curl -o ./test/5.txt -s -w "%{http_code}" https://api.github.com/repos/stevei5mc/AutoRestart/releases/tags/1.0.0-beta5)
         echo "v5=$STATUS_CODE" >> $GITHUB_OUTPUT
-        STATUS_CODE=$(curl -o ./test/6.txt -s -w "%{http_code}" https://api.github.com/repos/${{ github.repository }}/releasestags/1.0.0-beta6)
+        STATUS_CODE=$(curl -o ./test/6.txt -s -w "%{http_code}" https://api.github.com/repos/stevei5mc/AutoRestart/releases/tags/1.0.0-beta6)
         echo "v6=$STATUS_CODE" >> $GITHUB_OUTPUT
     - name: Output get info
       run: |
