@@ -5,33 +5,13 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - name: 拉取代码-1
-      uses: actions/checkout@v4
+    - name: T1
+      uses: stevei5mc/Get-PR-info-action@dev
       with:
-        submodules: true
-        repository: 'stevei5mc/AutoRestart'
-    - name: 安装java8
-      uses: actions/setup-java@v4.2.1
+        repoName: Predidit/Kazumi
+        prId: '753'
+    - name: T2
+      uses: stevei5mc/Get-PR-info-action@dev
       with:
-        java-version: '8'
-        distribution: 'temurin'
-    - name: Extractor pom.xml gav info 
-      uses: andreacomo/maven-gav-extractor@v2.0.1
-      id: getPomInfo
-    - name: Show get pom.xml gav info
-      run: |
-        echo Group id: ${{ steps.getPomInfo.outputs.group-id }}
-        echo Artifact id: ${{ steps.getPomInfo.outputs.artifact-id }}
-        echo Version: ${{ steps.getPomInfo.outputs.version }}
-    - name: list dir info 1
-      run: |
-        java -version
-        mvn versions:set -DnewVersion=11.45.14
-    - name: Extractor pom.xml gav info 
-      uses: andreacomo/maven-gav-extractor@v2.0.1
-      id: getPomInfo2
-    - name: Show get pom.xml gav info
-      run: |
-        echo Group id: ${{ steps.getPomInfo2.outputs.group-id }}
-        echo Artifact id: ${{ steps.getPomInfo2.outputs.artifact-id }}
-        echo Version: ${{ steps.getPomInfo2.outputs.version }}
+        repoName: Predidit/Kazumi
+        prId: '582'
