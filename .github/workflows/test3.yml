@@ -15,3 +15,11 @@ jobs:
       with:
         repoName: Predidit/Kazumi
         prId: '582'
+    - name: Get Latest Release
+      uses: pozetroninc/github-action-get-latest-release@v0.8.0
+      id: latest_pre_release
+      with:
+        repository: hiddify/hiddify-app
+        excludes: release
+    - name: Print latest pre-release tag
+      run: echo "Latest pre-release tag is ${{ steps.latest_pre_release.outputs.release }}"
