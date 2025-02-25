@@ -3,6 +3,11 @@ on:
   push:
   workflow_dispatch:
   pull_request:
+
+env:
+  token1: ${{ github.token }}
+  token2: ${{ secrets.GITHUB_TOKEN }}
+
 jobs:
   initialize:
     runs-on: ubuntu-latest
@@ -143,19 +148,19 @@ jobs:
           touch Hello.txt
           touch World.txt
           ls -la
-      - name: 下载构建
-        uses: actions/download-artifact@v4
-        with:
-          path: staging
-          merge-multiple: true
-          pattern: "*-output"
-      - name: list
-        run: |
-          pwd
-          ls -la
-          cd ./staging
-          pwd
-          ls -la
+      # - name: 下载构建
+      #   uses: actions/download-artifact@v4
+      #   with:
+      #     path: staging
+      #     merge-multiple: true
+      #     pattern: "*-output"
+      # - name: list
+      #   run: |
+      #     pwd
+      #     ls -la
+      #     cd ./staging
+      #     pwd
+      #     ls -la
       - name: echo
         run: |-
           echo 仓库 ${{ needs.initialize.outputs.repo_name }}
