@@ -100,25 +100,16 @@ jobs:
         echo 仓库 ${{ needs.initialize.outputs.repo_name }}
         echo 所有者 ${{ github.repository_owner }}
         echo ${{ github.repository_owner }}/${{ needs.initialize.outputs.repo_name }}
-    - name: test
-      shell: bash
-      run: |-
-        pwd
-        cd ./${{ matrix.path }}
-        touch ${{ matrix.name }}-1.txt
-        touch ${{ matrix.name }}-2.txt
-        touch ${{ matrix.name }}-3.txt
-        ls -la
-        pwd
-        cd ../
-        ls -la
-        echo "::warning::Test message ${{ runner.os }}"
-        echo "::warning::测试消息 ${{ runner.os }}"
-    - name: 收集构建文件
-      uses: actions/upload-artifact@v4.3.3
+    - name: T1
+      uses: stevei5mc/Get-PR-info-action@dev
       with:
-        name: ${{ matrix.name }}-output
-        path: ${{ matrix.path }}
+        repoName: Predidit/Kazumi
+        prId: '753'
+    - name: T2
+      uses: stevei5mc/Get-PR-info-action@dev
+      with:
+        repoName: Predidit/Kazumi
+        prId: '582'
     - name: Summary Action
       uses: johngeorgewright/summary-action@v1.0.0
       with:
