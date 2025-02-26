@@ -97,8 +97,8 @@ jobs:
     name: ${{ matrix.name }}
     #if: contains(needs.initialize.outputs.changed_fies, 'matrix.path/') || contains(needs.initialize.outputs.changed_fies, 'test.txt')
     steps:
-    - name: 拉取代码
-      uses: actions/checkout@v4.1.6
+    # - name: 拉取代码
+    #   uses: actions/checkout@v4.1.6
     # - name: Cache test
     #   uses: actions/cache@v4.0.2
     #   with:
@@ -116,6 +116,7 @@ jobs:
         repoName: Predidit/Kazumi
         prId: '582'
     - name: echo
+      shell: bash
       run: |-
         echo 仓库 ${{ needs.initialize.outputs.repo_name }}
         echo 所有者 ${{ github.repository_owner }}
