@@ -69,6 +69,9 @@ jobs:
           echo 仓库 ${{ needs.initialize.outputs.repo_name }}
           echo 所有者 ${{ github.repository_owner }}
           echo ${{ github.repository_owner }}/${{ needs.initialize.outputs.repo_name }}
+          ls -la
+          gh pr checkout https://github.com/Predidit/Kazumi/pull/759
+          ls -la
 
   TEST:
     strategy:
