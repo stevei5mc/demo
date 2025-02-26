@@ -42,11 +42,11 @@ jobs:
         touch 4.txt
         touch 5.txt
         cd ../
-    - name: 检查改动文件
-      id: changed-fies
-      uses: tj-actions/changed-files@v45.0.3
-    - name: 输出改动文件
-      run: echo ${{ steps.changed-fies.outputs.all_changed_and_modified_files }}
+    # - name: 检查改动文件
+    #   id: changed-fies
+    #   uses: tj-actions/changed-files@v45.0.3
+    # - name: 输出改动文件
+    #   run: echo ${{ steps.changed-fies.outputs.all_changed_and_modified_files }}
 
   build:
     needs: initialize
