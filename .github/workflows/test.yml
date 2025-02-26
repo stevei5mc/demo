@@ -7,6 +7,7 @@ on:
 env:
   token1: ${{ github.token }}
   token2: ${{ secrets.GITHUB_TOKEN }}
+  GH_TOKEN: ${{ github.token }}
 
 jobs:
   initialize:
