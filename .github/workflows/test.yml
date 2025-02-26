@@ -76,7 +76,7 @@ jobs:
 
   TEST:
     strategy:
-      failo-fast: false
+      fail-fast: false
       matrix:
         include: [
           {name: "TEST 1",path: "test1",os: ubuntu-latest},
@@ -105,14 +105,6 @@ jobs:
     #     path: |
     #       ./CacheTest
     #     key: ${{ runner.os }}-${{ hashFiles('**/test.txt') }}
-    - name: echo
-      run: |-
-        echo 仓库 ${{ needs.initialize.outputs.repo_name }}
-        echo 所有者 ${{ github.repository_owner }}
-        echo ${{ github.repository_owner }}/${{ needs.initialize.outputs.repo_name }}
-        ls -la
-        gh pr checkout https://github.com/Predidit/Kazumi/pull/759
-        ls -la
     - name: T1
       uses: stevei5mc/Get-PR-info-action@dev
       with:
@@ -123,6 +115,14 @@ jobs:
       with:
         repoName: Predidit/Kazumi
         prId: '582'
+    - name: echo
+      run: |-
+        echo 仓库 ${{ needs.initialize.outputs.repo_name }}
+        echo 所有者 ${{ github.repository_owner }}
+        echo ${{ github.repository_owner }}/${{ needs.initialize.outputs.repo_name }}
+        ls -la
+        gh pr checkout https://github.com/Predidit/Kazumi/pull/759
+        ls -la
     - name: Summary Action
       uses: johngeorgewright/summary-action@v1.0.0
       with:
