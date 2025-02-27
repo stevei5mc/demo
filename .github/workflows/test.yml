@@ -84,14 +84,11 @@ jobs:
           {name: "TEST 3",path: "test3",os: macos-latest}
         ]
     runs-on: ${{ matrix.os }}
-    needs:
-    - initialize
-    - build
-    name: ${{ matrix.name }}
-    #if: contains(needs.initialize.outputs.changed_fies, 'matrix.path/') || contains(needs.initialize.outputs.changed_fies, 'test.txt')
+    needs: [initialize,build]
+    name: ${{ matrix.name }}       
     steps:
-    # - name: 拉取代码
-    #   uses: actions/checkout@v4.1.6
+    - name: 拉取代码
+      uses: actions/checkout@v4.1.6
     # - name: Cache test
     #   uses: actions/cache@v4.0.2
     #   with:
@@ -130,9 +127,7 @@ jobs:
           ---
 
   deploy:
-    needs: 
-    - initialize
-    - TEST
+    needs: [initialize,TEST]
     runs-on: ubuntu-latest
     steps:
       - name: 拉取代码
@@ -171,9 +166,7 @@ jobs:
           echo ${{ github.repository_owner }}/${{ needs.initialize.outputs.repo_name }}
 
   debug:
-    needs: 
-    - initialize
-    - deploy
+    needs: [initialize,deploy]
     runs-on: ubuntu-latest
     if: ${{ failure() }}
     steps:
