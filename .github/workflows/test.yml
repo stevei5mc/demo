@@ -83,13 +83,6 @@ jobs:
           {name: "TEST 2",path: "test2",os: windows-latest},
           {name: "TEST 3",path: "test3",os: macos-latest}
         ]
-          
-          # - name: "TEST 1"
-          #   path: "test1"
-          # - name: "TEST 2"
-          #   path: "test2"
-          # - name: "TEST 3"
-          #   path: "test3"
     runs-on: ${{ matrix.os }}
     needs:
     - initialize
@@ -122,6 +115,7 @@ jobs:
         echo 所有者 ${{ github.repository_owner }}
         echo ${{ github.repository_owner }}/${{ needs.initialize.outputs.repo_name }}
         ls -la
+        git init
         gh pr checkout https://github.com/Predidit/Kazumi/pull/759
         ls -la
     - name: Summary Action
