@@ -96,12 +96,12 @@ jobs:
     #       ./CacheTest
     #     key: ${{ runner.os }}-${{ hashFiles('**/test.txt') }}
     - name: T1
-      uses: stevei5mc/Get-PR-info-action@dev
+      uses: stevei5mc/Get-PR-info-action@test
       with:
         repoName: Predidit/Kazumi
         prId: '753'
     - name: T2
-      uses: stevei5mc/Get-PR-info-action@dev
+      uses: stevei5mc/Get-PR-info-action@test
       with:
         repoName: Predidit/Kazumi
         prId: '582'
@@ -111,9 +111,9 @@ jobs:
         echo 仓库 ${{ needs.initialize.outputs.repo_name }}
         echo 所有者 ${{ github.repository_owner }}
         echo ${{ github.repository_owner }}/${{ needs.initialize.outputs.repo_name }}
-        ls -la
-        gh pr checkout 4
-        ls -la
+        # ls -la
+        # gh pr checkout 4
+        # ls -la
     - name: Summary Action
       uses: johngeorgewright/summary-action@v1.0.0
       with:
