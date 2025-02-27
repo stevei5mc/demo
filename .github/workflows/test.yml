@@ -112,7 +112,6 @@ jobs:
         echo 所有者 ${{ github.repository_owner }}
         echo ${{ github.repository_owner }}/${{ needs.initialize.outputs.repo_name }}
         ls -la
-        git init
         gh pr checkout https://github.com/Predidit/Kazumi/pull/759
         ls -la
     - name: Summary Action
