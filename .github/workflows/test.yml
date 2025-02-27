@@ -71,7 +71,7 @@ jobs:
           echo 所有者 ${{ github.repository_owner }}
           echo ${{ github.repository_owner }}/${{ needs.initialize.outputs.repo_name }}
           # ls -la
-          # gh pr checkout https://github.com/Predidit/Kazumi/pull/759
+          # gh pr checkout 4
           # ls -la
 
   TEST:
@@ -112,7 +112,7 @@ jobs:
         echo 所有者 ${{ github.repository_owner }}
         echo ${{ github.repository_owner }}/${{ needs.initialize.outputs.repo_name }}
         ls -la
-        gh pr checkout https://github.com/Predidit/Kazumi/pull/759
+        gh pr checkout 4
         ls -la
     - name: Summary Action
       uses: johngeorgewright/summary-action@v1.0.0
