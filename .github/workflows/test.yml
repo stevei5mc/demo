@@ -96,12 +96,12 @@ jobs:
     #       ./CacheTest
     #     key: ${{ runner.os }}-${{ hashFiles('**/test.txt') }}
     - name: T1
-      uses: stevei5mc/Get-PR-info-action@test
+      uses: stevei5mc/Get-PR-info-action@dev
       with:
         repoName: Predidit/Kazumi
         prId: '753'
     - name: T2
-      uses: stevei5mc/Get-PR-info-action@test
+      uses: stevei5mc/Get-PR-info-action@dev
       with:
         repoName: Predidit/Kazumi
         prId: '582'
