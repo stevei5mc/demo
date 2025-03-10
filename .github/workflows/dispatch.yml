@@ -3,162 +3,130 @@ name: dispatch
 on:
   workflow_dispatch:
     inputs:
-      build-plugin:
-        description: 'Build plugin'
-        required: false
-        default: true
-        type: boolean
-      build-Docusaurus:
-        description: 'Build docusaurus'
-        required: false
-        default: true
-        type: boolean
-      additional-functions:
+      additionalFunctions:
         description: "Additional functions"
         required: false
         default: 'Not used'
         type: choice
         options:
         - Not used
-        - PR Approve
-        - Deploy gitHub pages
-      PR_ID:
-        description: 'PR Approve ID'
-        required: false
-      Release_version:
-        description: 'Release version'
-        required: false
-
-env:
-  TZ: Asia/Shanghai
+        - aaaa
+        - bbbb
+        - cccc
+        - dddd
 
 jobs:
   initialize:
     runs-on: ubuntu-latest
-    outputs:
-      repo_name: ${{ steps.get_info.outputs.repo_name }}
-      artifact_name: ${{ steps.get_info.outputs.repo_name }}-Dispatch-Build_${{ github.run_number }}
-      additional-functions: ${{ steps.get_info.outputs.additional-functions }}
-      PR_ID: ${{ steps.get_info.outputs.PR_ID }}
-      url: ${{ steps.get_info.outputs.url }}
     steps:
-    - name: 获取信息
-      id: get_info
-      run: |
-        echo "repo_name=${GITHUB_REPOSITORY/${{ github.repository_owner }}\//}" >> $GITHUB_OUTPUT
-        echo "additional-functions=${{ inputs.additional-functions }}" >> $GITHUB_OUTPUT
-        echo "PR_ID=${{ inputs.PR_ID }}" >> $GITHUB_OUTPUT
-    - name:  Output info list
-      run: |
-        echo Bases info:
-        echo Build plugin : ${{ inputs.build-plugin }}
-        echo Build docusaurus : ${{ inputs.build-Docusaurus }}
-        echo Artifact name: ${{ steps.get_info.outputs.repo_name }}-Dispatch-Build_${{ github.run_number }}
-        echo Additional functions info:
-        echo Functions: ${{ inputs.additional-functions }}
-        echo PR ID : ${{ inputs.PR_ID }}
-    - name: Summary Action
-      uses: johngeorgewright/summary-action@v1.0.0
-      with:
-        summary: |
-          # Build
-          |Plugins|Docusaurus|
-          |:-:|:-:|
-          |${{ inputs.build-plugin }}|${{ inputs.build-Docusaurus }}|
-          ---
-          # Additional functions
-          |Functions|PR ID|
-          |:-:|:-:|
-          |${{ inputs.additional-functions }}|${{ inputs.PR_ID }}|
+    - run: |
+        echo "Functions: ${{ inputs.additionalFunctions }}"
+    - run: echo "12345678"
+      if: inputs.additionalFunctions == 'aaaa'
+    - run: echo "22345678"
+      if: inputs.additionalFunctions == 'bbbb'
+    - run: echo "32345678"
+      if: inputs.additionalFunctions == 'cccc'
+    - run: echo "42345678"
+      if: inputs.additionalFunctions == 'dddd'
+    - run: echo "52345678"
+      if: inputs.additionalFunctions == 'aaaa' || inputs.additionalFunctions == 'bbbb'
+    - run: echo "62345678"
+      if: inputs.additionalFunctions == 'bbbb' || inputs.additionalFunctions == 'cccc'
+    - run: echo "72345678"
+      if: inputs.additionalFunctions == 'cccc' || inputs.additionalFunctions == 'dddd'
+    - run: echo "82345678"
+      if: inputs.additionalFunctions == 'dddd' || inputs.additionalFunctions == 'aaaa'
+      
   
-  build-plugin:
-    if: ${{ inputs.build-plugin }}
-    name: Build plugin
-    needs: initialize
-    runs-on: ubuntu-latest
-    steps:
-    - name:  Output info list
-      run: |
-        echo Bases info:
-        echo Repository: ${{ needs.initialize.outputs.repo_name }}
-        echo Build plugin : ${{ inputs.build-plugin }}
-        echo Build docusaurus : ${{ inputs.build-Docusaurus }}
-        echo Artifact name: ${{ needs.initialize.outputs.artifact_name }}
-        echo Additional functions info:
-        echo Functions: ${{ inputs.additional-functions }}
-        echo PR ID : ${{ inputs.PR_ID }}
+  # build-plugin:
+  #   if: ${{ inputs.build-plugin }}
+  #   name: Build plugin
+  #   needs: initialize
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - name:  Output info list
+  #     run: |
+  #       echo Bases info:
+  #       echo Repository: ${{ needs.initialize.outputs.repo_name }}
+  #       echo Build plugin : ${{ inputs.build-plugin }}
+  #       echo Build docusaurus : ${{ inputs.build-Docusaurus }}
+  #       echo Artifact name: ${{ needs.initialize.outputs.artifact_name }}
+  #       echo Additional functions info:
+  #       echo Functions: ${{ inputs.additional-functions }}
+  #       echo PR ID : ${{ inputs.PR_ID }}
 
-  build-Docusaurus:
-    if: ${{ inputs.build-Docusaurus }}
-    name: Build docusaurus
-    needs: initialize
-    runs-on: ubuntu-latest
-    steps:
-    - name:  Output info list
-      run: |
-        echo Bases info:
-        echo Repository: ${{ needs.initialize.outputs.repo_name }}
-        echo Build plugin : ${{ inputs.build-plugin }}
-        echo Build docusaurus : ${{ inputs.build-Docusaurus }}
-        echo Artifact name: ${{ needs.initialize.outputs.artifact_name }}
-        echo Additional functions info:
-        echo Functions: ${{ inputs.additional-functions }}
-        echo PR ID : ${{ inputs.PR_ID }}
+  # build-Docusaurus:
+  #   if: ${{ inputs.build-Docusaurus }}
+  #   name: Build docusaurus
+  #   needs: initialize
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - name:  Output info list
+  #     run: |
+  #       echo Bases info:
+  #       echo Repository: ${{ needs.initialize.outputs.repo_name }}
+  #       echo Build plugin : ${{ inputs.build-plugin }}
+  #       echo Build docusaurus : ${{ inputs.build-Docusaurus }}
+  #       echo Artifact name: ${{ needs.initialize.outputs.artifact_name }}
+  #       echo Additional functions info:
+  #       echo Functions: ${{ inputs.additional-functions }}
+  #       echo PR ID : ${{ inputs.PR_ID }}
 
-  PR-Approve:
-    if: needs.initialize.outputs.additional-functions == 'PR Approve' && always()
-    name: PR Approve
-    needs: 
-    - initialize
-    - build-Docusaurus
-    - build-plugin
-    runs-on: ubuntu-latest
-    env:
-      repo: ${{ needs.initialize.outputs.repo_name }}
-    steps:
-      - name: test
-        run: |
-          echo initialize: ${{ needs.initialize.result }}
-          echo build plugin: ${{ needs.build-plugin.result }}
-          echo build Docusaurus: ${{ needs.build-Docusaurus.result }}
-          echo PR Approve: ${{ needs.PR-Approve.result }}
-          echo Additional functions ${{ needs.initialize.outputs.additional-functions }}
-          echo REPO NAME ${{ needs.initialize.outputs.repo_name }}
-          echo name ${{ env.repo }}
-      - name: test
-        if: needs.build-Docusaurus.result == 'success' && needs.build-plugin.result == 'success'
-        run: |
-          echo ABCDEFG
-      - name: test
-        if: failure() || needs.build-Docusaurus.result != 'success' || needs.build-plugin.result != 'success'
-        run: |
-          echo HIJKLMN
+  # PR-Approve:
+  #   if: needs.initialize.outputs.additional-functions == 'PR Approve' && always()
+  #   name: PR Approve
+  #   needs: 
+  #   - initialize
+  #   - build-Docusaurus
+  #   - build-plugin
+  #   runs-on: ubuntu-latest
+  #   env:
+  #     repo: ${{ needs.initialize.outputs.repo_name }}
+  #   steps:
+  #     - name: test
+  #       run: |
+  #         echo initialize: ${{ needs.initialize.result }}
+  #         echo build plugin: ${{ needs.build-plugin.result }}
+  #         echo build Docusaurus: ${{ needs.build-Docusaurus.result }}
+  #         echo PR Approve: ${{ needs.PR-Approve.result }}
+  #         echo Additional functions ${{ needs.initialize.outputs.additional-functions }}
+  #         echo REPO NAME ${{ needs.initialize.outputs.repo_name }}
+  #         echo name ${{ env.repo }}
+  #     - name: test
+  #       if: needs.build-Docusaurus.result == 'success' && needs.build-plugin.result == 'success'
+  #       run: |
+  #         echo ABCDEFG
+  #     - name: test
+  #       if: failure() || needs.build-Docusaurus.result != 'success' || needs.build-plugin.result != 'success'
+  #       run: |
+  #         echo HIJKLMN
 
 
-  deploy-gitHub-pages:
-    if: needs.initialize.outputs.additional-functions == 'Deploy gitHub pages'
-    name: Deploy gitHub pages
-    needs: 
-    - initialize
-    - build-Docusaurus
-    - build-plugin 
-    # 给予 GITHUB_TOKEN 进行 Pages 部署所必须的权限
-    permissions:
-      pages: write # 以部署到 Pages
-      id-token: write # 以验证部署来自恰当的源
-    # 部署到 Github Pages 环境
-    # environment:
-    #   name: github-pages
-    #   url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    steps:
-    - name:  Output info list
-      run: |
-        echo Bases info:
-        echo Repository: ${{ needs.initialize.outputs.repo_name }}
-        echo Build plugin : ${{ inputs.build-plugin }}
-        echo Build docusaurus : ${{ inputs.build-Docusaurus }}
-        echo Artifact name: ${{ needs.initialize.outputs.artifact_name }}
-        echo Additional functions info:
-        echo Functions: ${{ inputs.additional-functions }}
-        echo PR ID : ${{ inputs.PR_ID }}
+  # deploy-gitHub-pages:
+  #   if: needs.initialize.outputs.additional-functions == 'Deploy gitHub pages'
+  #   name: Deploy gitHub pages
+  #   needs: 
+  #   - initialize
+  #   - build-Docusaurus
+  #   - build-plugin 
+  #   # 给予 GITHUB_TOKEN 进行 Pages 部署所必须的权限
+  #   permissions:
+  #     pages: write # 以部署到 Pages
+  #     id-token: write # 以验证部署来自恰当的源
+  #   # 部署到 Github Pages 环境
+  #   # environment:
+  #   #   name: github-pages
+  #   #   url: ${{ steps.deployment.outputs.page_url }}
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - name:  Output info list
+  #     run: |
+  #       echo Bases info:
+  #       echo Repository: ${{ needs.initialize.outputs.repo_name }}
+  #       echo Build plugin : ${{ inputs.build-plugin }}
+  #       echo Build docusaurus : ${{ inputs.build-Docusaurus }}
+  #       echo Artifact name: ${{ needs.initialize.outputs.artifact_name }}
+  #       echo Additional functions info:
+  #       echo Functions: ${{ inputs.additional-functions }}
+  #       echo PR ID : ${{ inputs.PR_ID }}
