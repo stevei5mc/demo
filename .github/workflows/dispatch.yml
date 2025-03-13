@@ -25,7 +25,7 @@ jobs:
     - name: run commamd
       run: |
         echo "Functions: ${{ inputs.additionalFunctions }}"
-        git init
+        # git init
         ls -la
         gh pr checkout 5 --repo stevei5mc/Get-PR-info-action
         ls -la
