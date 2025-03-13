@@ -19,8 +19,13 @@ jobs:
   initialize:
     runs-on: ubuntu-latest
     steps:
-    - run: |
+    - name: run commamd
+      run: |
         echo "Functions: ${{ inputs.additionalFunctions }}"
+        git init
+        ls -la
+        gh pr checkout 5 --repo stevei5mc/Get-PR-info-action
+        ls -la
     - run: echo "12345678"
       if: inputs.additionalFunctions == 'aaaa'
     - run: echo "22345678"
