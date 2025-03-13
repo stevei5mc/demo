@@ -15,6 +15,9 @@ on:
         - cccc
         - dddd
 
+env:
+  GH_TOKEN: ${{ github.token }}
+
 jobs:
   initialize:
     runs-on: ubuntu-latest
