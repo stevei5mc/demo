@@ -1,6 +1,10 @@
 name: workflow test
 on:
   push:
+    branches:
+      - main
+    tags:
+      - '*'
   workflow_dispatch:
   pull_request:
 
@@ -22,6 +26,7 @@ jobs:
       run: |
         echo "repo_name=${GITHUB_REPOSITORY/${{ github.repository_owner }}\//}" >> $GITHUB_OUTPUT
         echo "ref=${{ GITHUB.REF }}" >> $GITHUB_OUTPUT
+        echo ${{ github.ref_name }}
     # - name: 拉取代码
     #   uses: actions/checkout@v4.1.6
     # - name: Cache test
