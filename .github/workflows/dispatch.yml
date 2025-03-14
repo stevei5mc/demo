@@ -27,7 +27,8 @@ jobs:
         echo "Functions: ${{ inputs.additionalFunctions }}"
         # git init
         ls -la
-        gh pr checkout 5 --repo stevei5mc/Get-PR-info-action
+        git clone -b ${{ github.ref_name }} https://github.com/${{ github.repository }}.git
+        # gh pr checkout 5 --repo stevei5mc/Get-PR-info-action
         ls -la
     - run: echo "12345678"
       if: inputs.additionalFunctions == 'aaaa'
