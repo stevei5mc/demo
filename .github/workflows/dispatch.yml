@@ -29,6 +29,7 @@ jobs:
         echo $(date) >> test.txt
         git branch --show-current
         git status
+        git add test.txt
         git commit -m "Action commit in ${{ github.workflow }} run in ${{ github.run_number }}"
         git push
     - run: echo "12345678"
