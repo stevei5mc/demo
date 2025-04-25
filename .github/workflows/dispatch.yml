@@ -24,7 +24,7 @@ jobs:
     steps:
     - run: |
         ls -la
-        gh repo clone stevei5mc/demo-- -b workflows-test
+        gh repo clone stevei5mc/demo -- -b workflows-test
         ls -la
         git branch --show-current
         gh pr checkout 4
