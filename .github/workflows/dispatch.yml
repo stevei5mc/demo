@@ -22,16 +22,13 @@ jobs:
   initialize:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4.1.6
     - run: |
-        git config --global user.name "github-actions[bot]"
-        git config --global user.email "github-actions[bot]@users.noreply.github.com"
-        echo $(date) >> test.txt
+        ls -la
+        gh repo clone stevei5mc/demo-- -b workflows-test
+        ls -la
         git branch --show-current
-        git status
-        git add test.txt
-        git commit -m "Action commit in ${{ github.workflow }} run in ${{ github.run_number }}"
-        git push
+        gh pr checkout 4
+        ls -la
     - run: echo "12345678"
       if: inputs.additionalFunctions == 'aaaa'
     - run: echo "22345678"
