@@ -17,12 +17,14 @@ on:
 
 env:
   GH_TOKEN: ${{ github.token }}
+  KEY: "114514"
 
 jobs:
   initialize:
     runs-on: ubuntu-latest
     steps:
     - run: |
+        echo $KEY
         ls -la
         gh repo clone stevei5mc/demo temp_dir -- -b workflows-test
         mv temp_dir/* temp_dir/.* .
