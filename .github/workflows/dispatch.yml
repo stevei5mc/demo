@@ -24,7 +24,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - run: |
-        echo $KEY
+        echo "HHHH $KEY"
         ls -la
         gh repo clone stevei5mc/demo temp_dir -- -b workflows-test
         mv temp_dir/* temp_dir/.* .
