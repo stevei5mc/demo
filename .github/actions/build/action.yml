@@ -1,0 +1,13 @@
+name: "b"
+description: "D"
+runs:
+  using: "composite"
+  steps:
+  - name: Build
+    if: ${{ inputs.perform_deploy == 'false' }}
+    run: echo sdggswdgsydugwefwefwefwefvgwcew
+    shell: bash
+  - name: Set up Java 17
+    uses: actions/setup-java@v3
+    with:
+      java-version: 17

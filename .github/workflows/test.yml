@@ -17,6 +17,7 @@ jobs:
       repo_name: ${{ steps.get_info.outputs.repo_name }}
       ref: ${{ steps.get_info.outputs.ref }}
     steps:
+    - uses: ./.github/actions/build
     - name: 获取信息
       id: get_info
       run: |
