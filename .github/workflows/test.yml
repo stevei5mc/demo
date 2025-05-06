@@ -17,6 +17,8 @@ jobs:
       repo_name: ${{ steps.get_info.outputs.repo_name }}
       ref: ${{ steps.get_info.outputs.ref }}
     steps:
+    - name: 拉取代码
+      uses: actions/checkout@v4.1.6 
     - uses: ./.github/actions/build
     - name: 获取信息
       id: get_info
@@ -57,6 +59,7 @@ jobs:
     steps:
       - name: 拉取代码
         uses: actions/checkout@v4.1.6 
+      - uses: ./.github/actions/build
       # - name: Cache test
       #   uses: actions/cache@v4.0.2
       #   with:
@@ -90,6 +93,7 @@ jobs:
     steps:
     - name: 拉取代码
       uses: actions/checkout@v4.1.6
+    - uses: ./.github/actions/build
     # - name: Cache test
     #   uses: actions/cache@v4.0.2
     #   with:
@@ -132,6 +136,7 @@ jobs:
     steps:
       - name: 拉取代码
         uses: actions/checkout@v4.1.6 
+      - uses: ./.github/actions/build
       - run: echo "Deploying build ${{ needs.build.outputs.build_id }}"
       # - name: Cache test
       #   uses: actions/cache@v4.0.2
