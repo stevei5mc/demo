@@ -1,0 +1,23 @@
+name: Test
+description: Test file
+title: "[test]: "
+body:
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: 测试
+      placeholder: 测试
+      value: "测试!"
+    validations:
+      required: true
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Code of Conduct
+      description: 确认信息
+      options:
+        - label: 测试 A
+          required: true
+        - label: 测试 B
+          required: true
