@@ -1,9 +1,8 @@
-version: 1
-default: prprprpr.md
-templates:
-  - name: PR template test 1
-    description: PR template test 1
-    filename: prprprpr.md
-  - name: PR template test 2
-    description: PR template test 2
-    filename: prrrrrr.yml
+template_chooser:
+  enabled: true
+  default: "prprprpr.md"
+  choices:
+    - name: "Bug fix"
+      file: "bug_fix.md"
+    - name: "New future"
+      file: "new_future.md"
