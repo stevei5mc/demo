@@ -29,16 +29,16 @@ jobs:
         uname -a
         echo ::endgroup::
         echo ::group::A003
-        lscpu | grep -E "Model name|Core|Socket|Thread"
+        lscpu
         echo ::endgroup::
         echo ::group::A004
         free -h
         echo ::endgroup::
         echo ::group::A005
-        df -h
+        lsblk
         echo ::endgroup::
         echo ::group::A006
-        ip addr show
+        ifconfig
         echo ::endgroup::
         echo ::group::A007
         env
