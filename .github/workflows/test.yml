@@ -48,17 +48,21 @@ jobs:
       run: |
         mkdir test1
         cd test1
+        pwd
         git init
         git remote add origin https://github.com/stevei5mc/demo.git
-        gh pr checkout 4
+        gh pr checkout 
+        ls -lah
         cd ../
     - name: Test2
       if: success() ||  failure()
       run: |
         mkdir test2
         cd test2
+        pwd
         git init
         git remote add origin https://github.com/stevei5mc/demo.git
         git pull
         gh pr checkout 4
+        ls -lah
         cd ../
