@@ -10,173 +10,55 @@ env:
   GH_TOKEN: ${{ github.token }}
 
 jobs:
-  initialize:
-    runs-on: ubuntu-latest
-    outputs:
-      changed_fies: ${{ steps.changed-fies.outputs.all_changed_and_modified_files }}
-      repo_name: ${{ steps.get_info.outputs.repo_name }}
-      ref: ${{ steps.get_info.outputs.ref }}
-    steps:
-    - name: 拉取代码
-      uses: actions/checkout@v4.1.6 
-    - uses: ./.github/actions/build
-    - name: 获取信息
-      id: get_info
-      run: |
-        echo "repo_name=${GITHUB_REPOSITORY/${{ github.repository_owner }}\//}" >> $GITHUB_OUTPUT
-        echo "ref=${{ GITHUB.REF }}" >> $GITHUB_OUTPUT
-    # - name: 拉取代码
-    #   uses: actions/checkout@v4.1.6
-    # - name: Cache test
-    #   uses: actions/cache@v4.0.2
-    #   with:
-    #     path: |
-    #       ./CacheTest
-    #     key: ${{ runner.os }}-${{ hashFiles('**/test.txt') }}
-    - name: file
-      run: |
-        pwd
-        mkdir CacheTest
-        ls -la
-        cd ./CacheTest
-        touch 1.txt
-        touch 2.txt
-        touch 3.txt
-        touch 4.txt
-        touch 5.txt
-        cd ../
-    # - name: 检查改动文件
-    #   id: changed-fies
-    #   uses: tj-actions/changed-files@v45.0.3
-    # - name: 输出改动文件
-    #   run: echo ${{ steps.changed-fies.outputs.all_changed_and_modified_files }}
-
-  build:
-    needs: initialize
-    runs-on: ubuntu-latest
-    outputs:
-      build_id: ${{ steps.build_step.outputs.build_id }}
-    steps:
-      - name: 拉取代码
-        uses: actions/checkout@v4.1.6 
-      - uses: ./.github/actions/build
-      # - name: Cache test
-      #   uses: actions/cache@v4.0.2
-      #   with:
-      #     path: |
-      #       ./CacheTest
-      #     key: ${{ runner.os }}-${{ hashFiles('**/test.txt') }}
-      - name: Build
-        id: build_step
-        run: echo "build_id=$RANDOM" >> $GITHUB_OUTPUT
-      - name: echo
-        run: |-
-          echo 仓库 ${{ needs.initialize.outputs.repo_name }}
-          echo 所有者 ${{ github.repository_owner }}
-          echo ${{ github.repository_owner }}/${{ needs.initialize.outputs.repo_name }}
-          # ls -la
-          # gh pr checkout 4
-          # ls -la
-
   TEST:
     strategy:
       fail-fast: false
       matrix:
         include: [
-          {name: "TEST 1",path: "test1",os: ubuntu-latest},
-          {name: "TEST 2",path: "test2",os: windows-latest},
-          {name: "TEST 3",path: "test3",os: macos-latest}
+          {os: ubuntu-latest},{os: ubuntu-slim}
         ]
     runs-on: ${{ matrix.os }}
-    needs: [initialize,build]
-    name: ${{ matrix.name }}       
+    name: Test     
     steps:
-    - name: 拉取代码
-      uses: actions/checkout@v4.1.6
-    - uses: ./.github/actions/build
-    # - name: Cache test
-    #   uses: actions/cache@v4.0.2
-    #   with:
-    #     path: |
-    #       ./CacheTest
-    #     key: ${{ runner.os }}-${{ hashFiles('**/test.txt') }}
-    - name: T1
-      uses: stevei5mc/Get-PR-info-action@dev
-      with:
-        repoName: Predidit/Kazumi
-        prId: '753'
-    - name: T2
-      uses: stevei5mc/Get-PR-info-action@dev
-      with:
-        repoName: Predidit/Kazumi
-        prId: '582'
-    - name: echo
-      shell: bash
-      run: |-
-        echo 仓库 ${{ needs.initialize.outputs.repo_name }}
-        echo 所有者 ${{ github.repository_owner }}
-        echo ${{ github.repository_owner }}/${{ needs.initialize.outputs.repo_name }}
-        # ls -la
-        # gh pr checkout 4
-        # ls -la
-    - name: Summary Action
-      uses: johngeorgewright/summary-action@v1.0.0
-      with:
-        summary: |
-          # ${{ matrix.name }}
-          仓库 ${{ needs.initialize.outputs.repo_name }}
-          所有者 ${{ github.repository_owner }}
-          ${{ github.repository_owner }}/${{ needs.initialize.outputs.repo_name }}
-          OS ${{ runner.os }}
-          ---
-
-  deploy:
-    needs: [initialize,TEST]
-    runs-on: ubuntu-latest
-    steps:
-      - name: 拉取代码
-        uses: actions/checkout@v4.1.6 
-      - uses: ./.github/actions/build
-      - run: echo "Deploying build ${{ needs.build.outputs.build_id }}"
-      # - name: Cache test
-      #   uses: actions/cache@v4.0.2
-      #   with:
-      #     path: |
-      #       ./CacheTest
-      #     key: ${{ runner.os }}-${{ hashFiles('**/test.txt') }}
-      - name: test
-        run: |-
-          pwd
-          mkdir test
-          touch Hello.txt
-          touch World.txt
-          ls -la
-      # - name: 下载构建
-      #   uses: actions/download-artifact@v4
-      #   with:
-      #     path: staging
-      #     merge-multiple: true
-      #     pattern: "*-output"
-      # - name: list
-      #   run: |
-      #     pwd
-      #     ls -la
-      #     cd ./staging
-      #     pwd
-      #     ls -la
-      - name: echo
-        run: |-
-          echo 仓库 ${{ needs.initialize.outputs.repo_name }}
-          echo 所有者 ${{ github.repository_owner }}
-          echo ${{ github.repository_owner }}/${{ needs.initialize.outputs.repo_name }}
-
-  debug:
-    needs: [initialize,deploy]
-    runs-on: ubuntu-latest
-    if: ${{ failure() }}
-    steps:
-      - name: echo
-        run: |-
-          echo 仓库 ${{ needs.initialize.outputs.repo_name }}
-          echo 所有者 ${{ github.repository_owner }}
-          echo ${{ github.repository_owner }}/${{ needs.initialize.outputs.repo_name }}
+    - name: Get info
+      run: |
+        echo ::group::A001
+        lsb_release -a
+        echo ::endgroup::
+        echo ::group::A002
+        uname -a
+        echo ::endgroup::
+        echo ::group::A003
+        lscpu | grep -E "Model name|Core|Socket|Thread"
+        echo ::endgroup::
+        echo ::group::A004
+        free -h
+        echo ::endgroup::
+        echo ::group::A005
+        df -h
+        echo ::endgroup::
+        echo ::group::A006
+        ip addr show
+        echo ::endgroup::
+        echo ::group::A007
+        env
+        echo ::endgroup::
+    - name: Test1
+      if: ${{ success }} && ${{ failure() }}
+      run: |
+        mkdir test1
+        cd test1
+        git init
+        git remote add origin https://github.com/stevei5mc/demo.git
+        gh pr checkout 4
+        cd ../
+    - name: Test2
+      if: ${{ success }} && ${{ failure() }}
+      run: |
+        mkdir test2
+        cd test2
+        git init
+        git remote add origin https://github.com/stevei5mc/demo.git
+        git pull
+        gh pr checkout 4
+        cd ../
