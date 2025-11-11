@@ -51,7 +51,7 @@ jobs:
         pwd
         git init
         git remote add origin https://github.com/stevei5mc/demo.git
-        gh pr checkout 
+        gh pr checkout 4
         ls -lah
         cd ../
     - name: Test2
