@@ -44,7 +44,7 @@ jobs:
         env
         echo ::endgroup::
     - name: Test1
-      if: success() && failure()
+      if: success() || failure()
       run: |
         mkdir test1
         cd test1
@@ -53,7 +53,7 @@ jobs:
         gh pr checkout 4
         cd ../
     - name: Test2
-      if: success() &&  failure()
+      if: success() ||  failure()
       run: |
         mkdir test2
         cd test2
