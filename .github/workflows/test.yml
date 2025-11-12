@@ -35,7 +35,7 @@ jobs:
         free -h
         echo ::endgroup::
         echo ::group::A005
-        lsblk
+        df
         echo ::endgroup::
         echo ::group::A006
         ifconfig
@@ -62,7 +62,7 @@ jobs:
         pwd
         git init
         git remote add origin https://github.com/stevei5mc/demo.git
-        git pull
+        git pull origin main
         gh pr checkout 4
         ls -lah
         cd ../
