@@ -14,35 +14,15 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        include: [
-          {os: ubuntu-latest},{os: ubuntu-slim}
-        ]
+        include: [{os: ubuntu-latest},{os: ubuntu-slim}]
     runs-on: ${{ matrix.os }}
     name: Test     
     steps:
     - name: Get info
       run: |
-        echo ::group::A001
-        lsb_release -a
-        echo ::endgroup::
-        echo ::group::A002
-        uname -a
-        echo ::endgroup::
-        echo ::group::A003
-        lscpu
-        echo ::endgroup::
-        echo ::group::A004
-        free -h
-        echo ::endgroup::
-        echo ::group::A005
-        df
-        echo ::endgroup::
-        echo ::group::A006
-        ifconfig
-        echo ::endgroup::
-        echo ::group::A007
-        env
-        echo ::endgroup::
+        sudo apt install fastfetch
+        echo ">>>>>>>"
+        fastfetch
     - name: Test1
       if: success() || failure()
       run: |
@@ -61,8 +41,7 @@ jobs:
         cd test2
         pwd
         git init
-        git remote add origin https://github.com/stevei5mc/demo.git
-        git pull origin main
-        gh pr checkout 4
+        git remote add origin https://github.com/Predidit/Kazumi.git
+        gh pr checkout 601
         ls -lah
         cd ../
