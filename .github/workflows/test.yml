@@ -20,9 +20,18 @@ jobs:
     steps:
     - name: Get info
       run: |
+        echo ::group::A001
         wget https://github.com/fastfetch-cli/fastfetch/releases/download/2.55.1/fastfetch-linux-amd64.deb
+        echo ::endgroup::
+        echo ::group::A002
         sudo apt install ./fastfetch-linux-amd64.deb
+        echo ::endgroup::
+        echo ::group::A003
         fastfetch
+        echo ::endgroup::
+        echo ::group::A004
+        lscpu | grep -E "Model name|Core|Socket|Thread"
+        echo ::endgroup::
     - name: Test1
       if: success() || failure()
       run: |
