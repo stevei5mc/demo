@@ -73,7 +73,7 @@ jobs:
         repository: 'fastfetch-cli/fastfetch'
         tag: '2.55.1'
         fileName: 'fastfetch-windows-aarch64.zip'
-    - run: unzip 'fastfetch-windows-aarch64.zip && ls -la
+    - run: unzip fastfetch-windows-aarch64.zip && ls -la
       shell: bash
     - run: fastfetch.exe
       shell: cmd
