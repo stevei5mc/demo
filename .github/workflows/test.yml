@@ -10,26 +10,36 @@ env:
   GH_TOKEN: ${{ github.token }}
 
 jobs:
-  TEST1:
+  TEST-Linux:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+        - {os: ubuntu-latest, type: fastfetch-linux-amd64.deb}
+        - {os: ubuntu-24.04-arm, type: fastfetch-linux-aarch64.deb}
     runs-on: ubuntu-latest
-    name: Test1 
+    name: ${{ matrix.os }}
     steps:
-    - run: wget https://github.com/fastfetch-cli/fastfetch/releases/download/2.55.1/fastfetch-linux-amd64.deb
-    - run: sudo apt install ./fastfetch-linux-amd64.deb
-    - run: fastfetch --format json
+    - run: wget https://github.com/fastfetch-cli/fastfetch/releases/download/2.55.1/${{ matrix.type }}
+    - run: sudo apt install ./${{ matrix.type }}
+    - run: fastfetch
     - run: lscpu | grep -E "Model name|Core|Socket|Thread"
+    - name: Webhook Action
+      uses: joelwmale/webhook-action@2.4.1
+      with:
+        url: ${{ secrets.WEBHOOK_TEST }}
+        headers: '{"repository": "${{ github.repository }}"}'
+        body: '{"repository": "github.repository", "aaa": "amns", "os": "${{ matrix.os }}" }'
 
-  TEST2:
-    runs-on: ubuntu-24.04-arm
-    name: Test2
-    steps:
-      - run: wget https://github.com/fastfetch-cli/fastfetch/releases/download/2.55.1/fastfetch-linux-aarch64.deb
-      - run: sudo apt install ./fastfetch-linux-aarch64.deb
-      - run: fastfetch --format json
-      - run: lscpu | grep -E "Model name|Core|Socket|Thread"
 
-  TEST3:
-    runs-on: windows-latest
+  TEST-Windows:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+        - {os: windows-latest, type: fastfetch-windows-amd64.zip}
+        - {os: windows-11-arm, type: fastfetch-windows-aarch.zip}
+    runs-on: ${{ matrix.os }}
     name: Test3
     steps:
     - name: Download fastfetch
@@ -37,23 +47,14 @@ jobs:
       with:
         repository: 'fastfetch-cli/fastfetch'
         tag: '2.55.1'
-        fileName: 'fastfetch-windows-amd64.zip'
-    - run: unzip fastfetch-windows-amd64.zip && ls -la
+        fileName: '${{ matrix.type }}'
+    - run: unzip ${{ matrix.type }} && ls -la
       shell: bash
-    - run: fastfetch.exe --format json
+    - run: fastfetch.exe
       shell: cmd
-
-  TEST4:
-    runs-on: windows-11-arm
-    name: Test4
-    steps:
-    - name: Download fastfetch
-      uses: robinraju/release-downloader@v1.11
+    - name: Webhook Action
+      uses: joelwmale/webhook-action@2.4.1
       with:
-        repository: 'fastfetch-cli/fastfetch'
-        tag: '2.55.1'
-        fileName: 'fastfetch-windows-aarch64.zip'
-    - run: unzip fastfetch-windows-aarch64.zip && ls -la
-      shell: bash
-    - run: fastfetch.exe --format json
-      shell: cmd
+        url: ${{ secrets.WEBHOOK_TEST }}
+        headers: '{"repository": "${{ github.repository }}"}'
+        body: '{"repository": "github.repository", "aaa": "amns", "os": "${{ matrix.os }}" }'
