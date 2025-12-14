@@ -17,7 +17,7 @@ jobs:
         include:
         - {os: ubuntu-latest, type: fastfetch-linux-amd64.deb}
         - {os: ubuntu-24.04-arm, type: fastfetch-linux-aarch64.deb}
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     name: ${{ matrix.os }}
     steps:
     - run: wget https://github.com/fastfetch-cli/fastfetch/releases/download/2.55.1/${{ matrix.type }}
@@ -38,9 +38,9 @@ jobs:
       matrix:
         include:
         - {os: windows-latest, type: fastfetch-windows-amd64.zip}
-        - {os: windows-11-arm, type: fastfetch-windows-aarch.zip}
+        - {os: windows-11-arm, type: fastfetch-windows-aarch64.zip}
     runs-on: ${{ matrix.os }}
-    name: Test3
+    name: ${{ matrix.os }}
     steps:
     - name: Download fastfetch
       uses: robinraju/release-downloader@v1.11
