@@ -20,17 +20,22 @@ jobs:
     runs-on: ${{ matrix.os }}
     name: ${{ matrix.os }}
     steps:
-    - run: wget https://github.com/fastfetch-cli/fastfetch/releases/download/2.55.1/${{ matrix.type }}
-    - run: sudo apt install ./${{ matrix.type }}
-    - run: fastfetch
-    - run: lscpu | grep -E "Model name|Core|Socket|Thread"
+    # - run: wget https://github.com/fastfetch-cli/fastfetch/releases/download/2.55.1/${{ matrix.type }}
+    # - run: sudo apt install ./${{ matrix.type }}
+    # - run: fastfetch
+    # - run: lscpu | grep -E "Model name|Core|Socket|Thread"
+    - run: ip -s
     - name: Webhook Action
       uses: joelwmale/webhook-action@2.4.1
       with:
         url: ${{ secrets.WEBHOOK_TEST }}
         headers: '{"repository": "${{ github.repository }}"}'
-        body: '{"repository": "github.repository", "aaa": "amns", "os": "${{ matrix.os }}" }'
-
+        body: '{"repository": "${{ github.repository }}", "aaa": "amns", "os": "${{ matrix.os }}" }'
+    - name: Workflow Webhook Action
+      uses: distributhor/workflow-webhook@v3.0.8
+      with:
+        webhook_url: ${{ secrets.WEBHOOK_TEST }}
+        data: '{"repository": "${{ github.repository }}", "bbb": "snma", "os": "${{ matrix.os }}" }'
 
   TEST-Windows:
     strategy:
@@ -42,19 +47,25 @@ jobs:
     runs-on: ${{ matrix.os }}
     name: ${{ matrix.os }}
     steps:
-    - name: Download fastfetch
-      uses: robinraju/release-downloader@v1.11
-      with:
-        repository: 'fastfetch-cli/fastfetch'
-        tag: '2.55.1'
-        fileName: '${{ matrix.type }}'
-    - run: unzip ${{ matrix.type }} && ls -la
-      shell: bash
-    - run: fastfetch.exe
-      shell: cmd
+    # - name: Download fastfetch
+    #   uses: robinraju/release-downloader@v1.11
+    #   with:
+    #     repository: 'fastfetch-cli/fastfetch'
+    #     tag: '2.55.1'
+    #     fileName: '${{ matrix.type }}'
+    # - run: unzip ${{ matrix.type }} && ls -la
+    #   shell: bash
+    # - run: fastfetch.exe
+    #   shell: cmd
+    - run: ipconfig
     - name: Webhook Action
       uses: joelwmale/webhook-action@2.4.1
       with:
         url: ${{ secrets.WEBHOOK_TEST }}
         headers: '{"repository": "${{ github.repository }}"}'
-        body: '{"repository": "github.repository", "aaa": "amns", "os": "${{ matrix.os }}" }'
+        body: '{"repository": "${{ github.repository }}", "aaa": "amns", "os": "${{ matrix.os }}" }'
+    - name: Workflow Webhook Action
+      uses: distributhor/workflow-webhook@v3.0.8
+      with:
+        webhook_url: ${{ secrets.WEBHOOK_TEST }}
+        data: '{"repository": "${{ github.repository }}", "bbb": "snma", "os": "${{ matrix.os }}" }'
