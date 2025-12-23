@@ -15,8 +15,9 @@ jobs:
       fail-fast: false
       matrix:
         include:
-        - {os: ubuntu-latest, type: fastfetch-linux-amd64.deb}
-        - {os: ubuntu-24.04-arm, type: fastfetch-linux-aarch64.deb}
+        - {os: ubuntu-latest}
+        - {os: ubuntu-24.04-arm}
+        - {os: ubuntu-22.04}
     runs-on: ${{ matrix.os }}
     name: ${{ matrix.os }}
     steps:
@@ -29,8 +30,9 @@ jobs:
       fail-fast: false
       matrix:
         include:
-        - {os: windows-latest, type: fastfetch-windows-amd64.zip}
-        - {os: windows-11-arm, type: fastfetch-windows-aarch64.zip}
+        - {os: windows-latest}
+        - {os: windows-11-arm}
+        - {os: windows-2022}
     runs-on: ${{ matrix.os }}
     name: ${{ matrix.os }}
     steps:
