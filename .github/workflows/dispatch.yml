@@ -39,7 +39,7 @@ jobs:
     - name: 复制文件
       run:  |
         ls -la
-        mkdir ./staging && cp ${{ inputs.files-path }} ./staging
+        mkdir ./staging && cp ./repo/${{ inputs.files-path }} ./staging
     - name: 收集构建文件
       uses: actions/upload-artifact@v6
       with:
