@@ -28,7 +28,7 @@ jobs:
       url: ${{ steps.get_info.outputs.url }}
     steps:
     - name: 拉取代码
-      run: git clone ${{ inputs.PR_ID }} ./repo
+      run: git clone ${{ inputs.repo-url }} ./repo
     - name: 安装java${{ inputs.java-version }}
       uses: actions/setup-java@v5
       with:
