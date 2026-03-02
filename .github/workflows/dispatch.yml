@@ -37,7 +37,9 @@ jobs:
     - name: 构建
       run: cd ./repo && pwd && ${{ inputs.build-command }} && cd ../
     - name: 复制文件
-      run:  mkdir ./staging && cp ${{ inputs.files-path }} ./staging
+      run:  |
+        ls -la
+        mkdir ./staging && cp ${{ inputs.files-path }} ./staging
     - name: 收集构建文件
       uses: actions/upload-artifact@v6
       with:
