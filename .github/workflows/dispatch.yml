@@ -19,7 +19,7 @@ on:
 jobs:
   T1:
     name: test1
-    runs-on: ubuntu-slim
+    runs-on: ubuntu-latest
     outputs:
       repo_name: ${{ steps.get_info.outputs.repo_name }}
       artifact_name: ${{ steps.get_info.outputs.repo_name }}-Dispatch-Build_${{ github.run_number }}
@@ -37,7 +37,7 @@ jobs:
     - name: 构建
       run: cd ./repo && pwd && ${{ inputs.build-command }} && cd ../
     - name: 复制文件
-      run:  mkdir ./staging && cp ${{ inputs.build-command }} ./staging
+      run:  mkdir ./staging && cp ${{ inputs.files-path }} ./staging
     - name: 收集构建文件
       uses: actions/upload-artifact@v6
       with:
