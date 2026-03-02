@@ -1,0 +1,42 @@
+name: workflow test
+on:
+  push:
+  workflow_dispatch:
+  pull_request:
+
+env:
+  token1: ${{ github.token }}
+  token2: ${{ secrets.GITHUB_TOKEN }}
+  GH_TOKEN: ${{ github.token }}
+
+jobs:
+  TEST-Linux:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+        - {os: ubuntu-latest}
+        - {os: ubuntu-24.04-arm}
+        - {os: ubuntu-22.04}
+    runs-on: ${{ matrix.os }}
+    name: ${{ matrix.os }}
+    steps:
+    - run: ip addr show
+    - run: hostname
+
+
+  TEST-Windows:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+        - {os: windows-latest}
+        - {os: windows-11-arm}
+        - {os: windows-2022}
+    runs-on: ${{ matrix.os }}
+    name: ${{ matrix.os }}
+    steps:
+    - run: ipconfig
+      shell: cmd
+    - run: hostname
+      shell: cmd

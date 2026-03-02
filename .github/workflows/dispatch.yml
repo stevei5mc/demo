@@ -1,0 +1,45 @@
+name: dispatch
+
+on:
+  workflow_dispatch:
+    inputs:
+      repo-url:
+        description: 'Repo url'
+        required: true
+      java-version:
+        description: 'Java version'
+        required: true
+      build-command:
+        description: 'Build command'
+        required: true
+      files-path:
+        description: 'Files path'
+        required: true
+
+jobs:
+  T1:
+    name: test1
+    runs-on: ubuntu-slim
+    outputs:
+      repo_name: ${{ steps.get_info.outputs.repo_name }}
+      artifact_name: ${{ steps.get_info.outputs.repo_name }}-Dispatch-Build_${{ github.run_number }}
+      additional-functions: ${{ steps.get_info.outputs.additional-functions }}
+      PR_ID: ${{ steps.get_info.outputs.PR_ID }}
+      url: ${{ steps.get_info.outputs.url }}
+    steps:
+    - name: 拉取代码
+      run: git clone ${{ inputs.PR_ID }} ./repo
+    - name: 安装java${{ inputs.java-version }}
+      uses: actions/setup-java@v5
+      with:
+        java-version: '${{ inputs.java-version }}'
+        distribution: 'temurin'
+    - name: 构建
+      run: cd ./repo && pwd && ${{ inputs.build-command }} && cd ../
+    - name: 复制文件
+      run:  mkdir ./staging && cp ${{ inputs.build-command }} ./staging
+    - name: 收集构建文件
+      uses: actions/upload-artifact@v6
+      with:
+        name: action_id_${{ github.run_number }}
+        path: staging
