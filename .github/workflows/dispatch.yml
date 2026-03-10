@@ -52,4 +52,4 @@ jobs:
   
   build-plugin:
     needs: initialize
-    uses: ./.github/workflows/setup.yaml
+    uses: ./.github/workflows/call.yaml
