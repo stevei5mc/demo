@@ -36,14 +36,14 @@ jobs:
   initialize:
     runs-on: ubuntu-lslim
     steps:
-      - run: echo 1145141919810 && sleep 5
-      - parallel:
-        - name: Build frontend
-          run: echo 114514 && sleep 5
-        - name: Build backend
-          run: echo 1919810 && sleep 5
-        - name: Build docs
-          run: echo axdvfbgvr && sleep 5
+      # - run: echo 1145141919810 && sleep 5
+      # - parallel:
+      #   - name: Build frontend
+      #     run: echo 114514 && sleep 5
+      #   - name: Build backend
+      #     run: echo 1919810 && sleep 5
+      #   - name: Build docs
+      #     run: echo axdvfbgvr && sleep 5
 
       - name: Build frontend
         id: step-1
