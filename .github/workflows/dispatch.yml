@@ -36,6 +36,7 @@ jobs:
   initialize:
     runs-on: ubuntu-lslim
     steps:
+      - run: echo 1145141919810 && sleep 5
       - parallel:
         - name: Build frontend
           run: echo 114514 && sleep 5
