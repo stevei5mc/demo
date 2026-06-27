@@ -42,7 +42,7 @@ jobs:
         - name: a0001
           run: echo QWQ--0001 && sleep 5
         - name: a0002
-          run: eecho QWQ >> 0002 && sleep 5
+          run: echo QWQ >> 0002 && sleep 5
         - name: a0003
           run: echo QWQ---0003 && sleep 5
 
@@ -60,7 +60,7 @@ jobs:
         run: echo QWQ---0006 && sleep 15
 
       - name: Wait for both builds to finish
-        wait-all:
+        wait: [step-1, step-2]
 
       - name: a0007
         run: echo QWQ---0007 && sleep 5
