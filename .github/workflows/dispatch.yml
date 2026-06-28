@@ -36,7 +36,8 @@ jobs:
   initialize:
     runs-on: ubuntu-slim
     steps:
-      - run: echo QWQ--0000 && sleep 10
+      - run: echo QWQ--0000 && sleep 15
+        background: true
 
       - parallel:
         - name: a0001
@@ -46,21 +47,21 @@ jobs:
         - name: a0003
           run: echo QWQ---0003 && sleep 5
 
-      - name: a0004
-        id: step-1
-        run: echo QWQ---0004 && sleep 5
-        background: true
+      # - name: a0004
+      #   id: step-1
+      #   run: echo QWQ---0004 && sleep 5
+      #   background: true
 
-      - name: a0005
-        id: step-2
-        run: echo QWQ---0005 && sleep 5
-        background: true
+      # - name: a0005
+      #   id: step-2
+      #   run: echo QWQ---0005 && sleep 5
+      #   background: true
 
-      - name: a0006
-        run: echo QWQ---0006 && sleep 15
+      # - name: a0006
+      #   run: echo QWQ---0006 && sleep 15
 
-      - name: Wait for both builds to finish
-        wait: [step-1, step-2]
+      # - name: Wait for both builds to finish
+      #   wait: [step-1, step-2]
 
       - name: a0007
         run: echo QWQ---0007 && sleep 5
