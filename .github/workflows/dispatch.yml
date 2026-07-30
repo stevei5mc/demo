@@ -20,15 +20,10 @@ jobs:
   T1:
     name: test1
     runs-on: ubuntu-latest
-    outputs:
-      repo_name: ${{ steps.get_info.outputs.repo_name }}
-      artifact_name: ${{ steps.get_info.outputs.repo_name }}-Dispatch-Build_${{ github.run_number }}
-      additional-functions: ${{ steps.get_info.outputs.additional-functions }}
-      PR_ID: ${{ steps.get_info.outputs.PR_ID }}
-      url: ${{ steps.get_info.outputs.url }}
     steps:
     - name: 拉取代码
       run: git clone ${{ inputs.repo-url }} ./repo
+    - run: ls -la ./repo
     - name: 安装java${{ inputs.java-version }}
       uses: actions/setup-java@v5
       with:
