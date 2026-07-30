@@ -16,6 +16,9 @@ on:
         description: 'Files path'
         required: true
 
+env:
+  GH_TOKEN: ${{ github.token }}
+
 jobs:
   T1:
     name: test1
