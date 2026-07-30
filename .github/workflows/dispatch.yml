@@ -3,8 +3,11 @@ name: dispatch
 on:
   workflow_dispatch:
     inputs:
-      repo-url:
-        description: 'Repo url'
+      repo:
+        description: 'Repo'
+        required: true
+      branch:
+        description: 'branch'
         required: true
       java-version:
         description: 'Java version'
@@ -21,9 +24,14 @@ jobs:
     name: test1
     runs-on: ubuntu-latest
     steps:
-    - name: 拉取代码
-      run: git clone ${{ inputs.repo-url }} ./repo
-    - run: ls -la ./repo
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      with:
+        repository: ${{ inputs.repo }}
+        ref: ${{ inputs.branch}}
+        fetch-depth: 0
+        path: ./repo
+    - run: ls -lah
     - name: 安装java${{ inputs.java-version }}
       uses: actions/setup-java@v5
       with:
