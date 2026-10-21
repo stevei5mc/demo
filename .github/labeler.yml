@@ -1,0 +1,4 @@
+feature:
+  - head-branch: "(^|.*/)(feat|feature)[/_-]"
+test:
+  - head-branch: "(^|.*/)test[/_-]"
