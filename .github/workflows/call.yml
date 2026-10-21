@@ -1,0 +1,25 @@
+name: Call
+
+on:
+  workflow_call:
+
+jobs:
+  call-1:
+    runs-on: ubuntu-slim
+    timeout-minutes: 1
+    steps:
+      - run: echo 1145141919810
+  
+  call-2:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - {name: "A"}
+          - {name: "B"}
+    runs-on: ubuntu-slim
+    timeout-minutes: 1
+    needs: call-1
+    name: Call 2 ${{ matrix.name }}
+    steps:
+      - run: echo 1145141919810

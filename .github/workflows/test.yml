@@ -3,6 +3,12 @@ on:
   push:
   workflow_dispatch:
   pull_request:
+
+env:
+  token1: ${{ github.token }}
+  token2: ${{ secrets.GITHUB_TOKEN }}
+  GH_TOKEN: ${{ github.token }}
+
 jobs:
   initialize:
     runs-on: ubuntu-latest
@@ -11,13 +17,16 @@ jobs:
       repo_name: ${{ steps.get_info.outputs.repo_name }}
       ref: ${{ steps.get_info.outputs.ref }}
     steps:
+    - name: 拉取代码
+      uses: actions/checkout@v4.1.6 
+    - uses: ./.github/actions/build
     - name: 获取信息
       id: get_info
       run: |
         echo "repo_name=${GITHUB_REPOSITORY/${{ github.repository_owner }}\//}" >> $GITHUB_OUTPUT
         echo "ref=${{ GITHUB.REF }}" >> $GITHUB_OUTPUT
-    - name: 拉取代码
-      uses: actions/checkout@v4.1.6
+    # - name: 拉取代码
+    #   uses: actions/checkout@v4.1.6
     # - name: Cache test
     #   uses: actions/cache@v4.0.2
     #   with:
@@ -36,11 +45,11 @@ jobs:
         touch 4.txt
         touch 5.txt
         cd ../
-    - name: 检查改动文件
-      id: changed-fies
-      uses: tj-actions/changed-files@v45.0.3
-    - name: 输出改动文件
-      run: echo ${{ steps.changed-fies.outputs.all_changed_and_modified_files }}
+    # - name: 检查改动文件
+    #   id: changed-fies
+    #   uses: tj-actions/changed-files@v45.0.3
+    # - name: 输出改动文件
+    #   run: echo ${{ steps.changed-fies.outputs.all_changed_and_modified_files }}
 
   build:
     needs: initialize
@@ -50,6 +59,7 @@ jobs:
     steps:
       - name: 拉取代码
         uses: actions/checkout@v4.1.6 
+      - uses: ./.github/actions/build
       # - name: Cache test
       #   uses: actions/cache@v4.0.2
       #   with:
@@ -64,61 +74,51 @@ jobs:
           echo 仓库 ${{ needs.initialize.outputs.repo_name }}
           echo 所有者 ${{ github.repository_owner }}
           echo ${{ github.repository_owner }}/${{ needs.initialize.outputs.repo_name }}
+          # ls -la
+          # gh pr checkout 4
+          # ls -la
 
   TEST:
     strategy:
+      fail-fast: false
       matrix:
         include: [
           {name: "TEST 1",path: "test1",os: ubuntu-latest},
           {name: "TEST 2",path: "test2",os: windows-latest},
           {name: "TEST 3",path: "test3",os: macos-latest}
         ]
-          
-          # - name: "TEST 1"
-          #   path: "test1"
-          # - name: "TEST 2"
-          #   path: "test2"
-          # - name: "TEST 3"
-          #   path: "test3"
     runs-on: ${{ matrix.os }}
-    needs:
-    - initialize
-    - build
-    name: ${{ matrix.name }}
-    #if: contains(needs.initialize.outputs.changed_fies, 'matrix.path/') || contains(needs.initialize.outputs.changed_fies, 'test.txt')
+    needs: [initialize,build]
+    name: ${{ matrix.name }}       
     steps:
     - name: 拉取代码
       uses: actions/checkout@v4.1.6
+    - uses: ./.github/actions/build
     # - name: Cache test
     #   uses: actions/cache@v4.0.2
     #   with:
     #     path: |
     #       ./CacheTest
     #     key: ${{ runner.os }}-${{ hashFiles('**/test.txt') }}
+    - name: T1
+      uses: stevei5mc/Get-PR-info-action@dev
+      with:
+        repoName: Predidit/Kazumi
+        prId: '753'
+    - name: T2
+      uses: stevei5mc/Get-PR-info-action@dev
+      with:
+        repoName: Predidit/Kazumi
+        prId: '582'
     - name: echo
+      shell: bash
       run: |-
         echo 仓库 ${{ needs.initialize.outputs.repo_name }}
         echo 所有者 ${{ github.repository_owner }}
         echo ${{ github.repository_owner }}/${{ needs.initialize.outputs.repo_name }}
-    - name: test
-      shell: bash
-      run: |-
-        pwd
-        cd ./${{ matrix.path }}
-        touch ${{ matrix.name }}-1.txt
-        touch ${{ matrix.name }}-2.txt
-        touch ${{ matrix.name }}-3.txt
-        ls -la
-        pwd
-        cd ../
-        ls -la
-        echo "::warning::Test message ${{ runner.os }}"
-        echo "::warning::测试消息 ${{ runner.os }}"
-    - name: 收集构建文件
-      uses: actions/upload-artifact@v4.3.3
-      with:
-        name: ${{ matrix.name }}-output
-        path: ${{ matrix.path }}
+        # ls -la
+        # gh pr checkout 4
+        # ls -la
     - name: Summary Action
       uses: johngeorgewright/summary-action@v1.0.0
       with:
@@ -131,13 +131,12 @@ jobs:
           ---
 
   deploy:
-    needs: 
-    - initialize
-    - TEST
+    needs: [initialize,TEST]
     runs-on: ubuntu-latest
     steps:
       - name: 拉取代码
         uses: actions/checkout@v4.1.6 
+      - uses: ./.github/actions/build
       - run: echo "Deploying build ${{ needs.build.outputs.build_id }}"
       # - name: Cache test
       #   uses: actions/cache@v4.0.2
@@ -152,19 +151,19 @@ jobs:
           touch Hello.txt
           touch World.txt
           ls -la
-      - name: 下载构建
-        uses: actions/download-artifact@v4
-        with:
-          path: staging
-          merge-multiple: true
-          pattern: "*-output"
-      - name: list
-        run: |
-          pwd
-          ls -la
-          cd ./staging
-          pwd
-          ls -la
+      # - name: 下载构建
+      #   uses: actions/download-artifact@v4
+      #   with:
+      #     path: staging
+      #     merge-multiple: true
+      #     pattern: "*-output"
+      # - name: list
+      #   run: |
+      #     pwd
+      #     ls -la
+      #     cd ./staging
+      #     pwd
+      #     ls -la
       - name: echo
         run: |-
           echo 仓库 ${{ needs.initialize.outputs.repo_name }}
@@ -172,9 +171,7 @@ jobs:
           echo ${{ github.repository_owner }}/${{ needs.initialize.outputs.repo_name }}
 
   debug:
-    needs: 
-    - initialize
-    - deploy
+    needs: [initialize,deploy]
     runs-on: ubuntu-latest
     if: ${{ failure() }}
     steps:

@@ -1,0 +1,8 @@
+template_chooser:
+  enabled: true
+  default: "prprprpr.md"
+  choices:
+    - name: "Bug fix"
+      file: "bug_fix.md"
+    - name: "New future"
+      file: "new_future.md"
